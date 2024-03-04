@@ -63,7 +63,7 @@
                           <EmptySpace max="-2" attributes="0"/>
                           <Component id="redo" min="-2" pref="30" max="-2" attributes="0"/>
                       </Group>
-                      <Component id="jTabbedPane1" pref="1181" max="32767" attributes="0"/>
+                      <Component id="jTabbedPane1" alignment="0" max="32767" attributes="0"/>
                   </Group>
                   <EmptySpace min="-2" pref="45" max="-2" attributes="0"/>
               </Group>
@@ -123,7 +123,7 @@
                       <Component id="run" min="-2" pref="44" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="compile" min="-2" pref="44" max="-2" attributes="0"/>
-                      <EmptySpace max="32767" attributes="0"/>
+                      <EmptySpace pref="774" max="32767" attributes="0"/>
                       <Component id="Note" min="-2" pref="44" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="highlight" min="-2" pref="44" max="-2" attributes="0"/>
