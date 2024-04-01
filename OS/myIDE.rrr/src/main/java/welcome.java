@@ -1,11 +1,15 @@
 
+import java.awt.Dimension;
 import java.awt.Image;
+import java.awt.Toolkit;
 import javax.swing.Timer;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
+import static javax.print.DocFlavor.BYTE_ARRAY.GIF;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 
 
 /*
@@ -31,7 +35,28 @@ public class welcome extends javax.swing.JFrame {
      
 
     this.setIconImage(img);
-    this.setExtendedState(JFrame.MAXIMIZED_BOTH);
+        // Create a JLabel to hold the GIF image
+        JLabel gifLabel = new JLabel(new ImageIcon(getClass().getResource("/icons/welcomeScreen.gif")));
+        
+        // Get the screen size
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        
+        // Set the size of the label to match the screen size
+        gifLabel.setSize(screenSize);
+        gifLabel.setPreferredSize(screenSize);
+        
+        // Scale the image to fit the label
+        ImageIcon imageIcon = (ImageIcon) gifLabel.getIcon();
+        imageIcon.setImage(imageIcon.getImage().getScaledInstance(screenSize.width, screenSize.height, java.awt.Image.SCALE_DEFAULT));
+        gifLabel.setIcon(imageIcon);
+        
+        // Add the label to the frame
+        add(gifLabel);
+        
+        // Set the JFrame to fullscreen
+        setExtendedState(JFrame.MAXIMIZED_BOTH);
+        setUndecorated(true);
+        setVisible(true);
     
     //---timer-----//
     int welcomeDuration = 19000; // 9.9 seconds
@@ -62,32 +87,25 @@ public class welcome extends javax.swing.JFrame {
     private void initComponents() {
 
         jLabel2 = new javax.swing.JLabel();
-        jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setUndecorated(true);
-
-        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/welcomeScreen.gif"))); // NOI18N
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 1531, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(1537, 1537, 1537)
                 .addComponent(jLabel2)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap(750, Short.MAX_VALUE)
                 .addComponent(jLabel2)
                 .addGap(186, 186, 186))
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 930, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         setSize(new java.awt.Dimension(1543, 936));
@@ -143,7 +161,6 @@ public class welcome extends javax.swing.JFrame {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     // End of variables declaration//GEN-END:variables
 }
