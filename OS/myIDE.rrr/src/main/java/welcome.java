@@ -31,12 +31,12 @@ public class welcome extends javax.swing.JFrame {
         initComponents();
 
     //------------------sisiw logo-----//
-    Image img = new ImageIcon(this.getClass().getResource("/sisiwlanglogo.png")).getImage();
+    Image img = new ImageIcon(this.getClass().getResource("/SplashScreen/Bee.png")).getImage();
      
 
     this.setIconImage(img);
         // Create a JLabel to hold the GIF image
-        JLabel gifLabel = new JLabel(new ImageIcon(getClass().getResource("/icons/welcomeScreen.gif")));
+        JLabel gifLabel = new JLabel(new ImageIcon(getClass().getResource("/SplashScreen/HoneyFall.gif")));
         
         // Get the screen size
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();

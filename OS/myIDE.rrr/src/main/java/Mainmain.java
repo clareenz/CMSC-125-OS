@@ -79,7 +79,7 @@ public class Mainmain extends javax.swing.JFrame {
         setExtendedState(JFrame.MAXIMIZED_BOTH);
 
         //------------------sisiw logo-----//
-        Image img = new ImageIcon(this.getClass().getResource("/sisiwlanglogo.png")).getImage();
+        Image img = new ImageIcon(this.getClass().getResource("/SplashScreen/Bee.png")).getImage();
         this.setIconImage(img);
         setTitle("sisiw");
 
