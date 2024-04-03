@@ -36,7 +36,7 @@ public class welcome extends javax.swing.JFrame {
 
     this.setIconImage(img);
         // Create a JLabel to hold the GIF image
-        JLabel gifLabel = new JLabel(new ImageIcon(getClass().getResource("/SplashScreen/HoneyFall.gif")));
+        JLabel gifLabel = new JLabel(new ImageIcon(getClass().getResource("/SplashScreen/Startup ver 2.gif")));
         
         // Get the screen size
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
