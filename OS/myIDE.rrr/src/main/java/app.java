@@ -77,9 +77,9 @@ public class app extends javax.swing.JFrame {
         initComponents();
 
          //------------------sisiw logo-----//
-        Image img = new ImageIcon(this.getClass().getResource("/sisiwlanglogo.png")).getImage();
+        Image img = new ImageIcon(this.getClass().getResource("/SplashScreen/Bee.png")).getImage();
         this.setIconImage(img);
-        setTitle("sisiw");
+        setTitle("Honey OS");
         
         
         fileNames.add(null);
@@ -137,7 +137,7 @@ private void saveAsFunction(){
             String text = "";
                 JFileChooser fileChooser = new JFileChooser();
                 int returnValue = fileChooser.showSaveDialog(this);
-                   String extension = ".ssw";
+                   String extension = ".txt";
                 if (returnValue == JFileChooser.APPROVE_OPTION) {
                     File selectedFile = fileChooser.getSelectedFile();
                     Filename = selectedFile.getAbsolutePath() + extension;
@@ -149,7 +149,7 @@ private void saveAsFunction(){
                         JTextComponent selectedTextArea = findTextAreaInScrollPane(selectedTab);
                         if (selectedTextArea != null) {
                         text = selectedTextArea.getText();
-                        jTabbedPane1.setTabComponentAt(selectedTabIndex,getTitlePanel(jTabbedPane1,(JPanel)jTabbedPane1.getComponentAt(selectedTabIndex), fname+".ssw"));
+                        jTabbedPane1.setTabComponentAt(selectedTabIndex,getTitlePanel(jTabbedPane1,(JPanel)jTabbedPane1.getComponentAt(selectedTabIndex), fname+".txt"));
                         jTabbedPane1.getSelectedIndex();
                         }
                         }
@@ -318,7 +318,22 @@ closeButton.addMouseListener(new MouseAdapter() {
     private void initComponents() {
 
         jPanel2 = new javax.swing.JPanel();
+        ImageIcon icon=new ImageIcon(getClass().getResource("bee 3.jpg"));
+        Image img=icon.getImage();
+        jDesktopPane1 = new javax.swing.JDesktopPane()
+        {
+            public void paintComponent(Graphics g)
+            {
+                g.drawImage(img,0,0,getWidth(),
+                    getHeight(),this);
+            }
+
+        };
         jTabbedPane1 = new raven.tabbed.TabbedPaneCustom();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        notes = new javax.swing.JTextArea();
+        undo = new javax.swing.JButton();
+        redo = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
         newFile = new javax.swing.JButton();
         openFile = new javax.swing.JButton();
@@ -329,23 +344,50 @@ closeButton.addMouseListener(new MouseAdapter() {
         Note = new javax.swing.JButton();
         highlight = new javax.swing.JButton();
         unhighlight = new javax.swing.JButton();
-        redo = new javax.swing.JButton();
-        undo = new javax.swing.JButton();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        notes = new javax.swing.JTextArea();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle(Filename);
         setBackground(new java.awt.Color(209, 197, 223));
 
-        jPanel2.setBackground(new java.awt.Color(209, 197, 223));
         jPanel2.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
 
-        jTabbedPane1.setSelectedColor(new java.awt.Color(191, 171, 203));
+        jTabbedPane1.setSelectedColor(new java.awt.Color(254, 191, 61));
 
-        jPanel1.setBackground(new java.awt.Color(179, 159, 202));
+        notes.setColumns(20);
+        notes.setRows(5);
+        jScrollPane1.setViewportView(notes);
 
-        newFile.setBackground(new java.awt.Color(204, 204, 255));
+        undo.setBackground(new java.awt.Color(254, 191, 61));
+        undo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/undooo.png"))); // NOI18N
+        compile.setEnabled(false);
+        undo.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                undoMouseEntered(evt);
+            }
+        });
+        undo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                undoActionPerformed(evt);
+            }
+        });
+
+        redo.setBackground(new java.awt.Color(254, 191, 61));
+        redo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/redooo.png"))); // NOI18N
+        compile.setEnabled(false);
+        redo.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                redoMouseEntered(evt);
+            }
+        });
+        redo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                redoActionPerformed(evt);
+            }
+        });
+
+        jPanel1.setBackground(new java.awt.Color(88, 51, 33));
+
+        newFile.setBackground(new java.awt.Color(254, 191, 61));
         newFile.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/new file.png"))); // NOI18N
         newFile.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseEntered(java.awt.event.MouseEvent evt) {
@@ -358,7 +400,7 @@ closeButton.addMouseListener(new MouseAdapter() {
             }
         });
 
-        openFile.setBackground(new java.awt.Color(204, 204, 255));
+        openFile.setBackground(new java.awt.Color(254, 191, 61));
         openFile.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/open file.png"))); // NOI18N
         openFile.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseEntered(java.awt.event.MouseEvent evt) {
@@ -371,7 +413,7 @@ closeButton.addMouseListener(new MouseAdapter() {
             }
         });
 
-        save.setBackground(new java.awt.Color(204, 204, 255));
+        save.setBackground(new java.awt.Color(254, 191, 61));
         save.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/save.png"))); // NOI18N
         save.setEnabled(false);
         save.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -385,7 +427,7 @@ closeButton.addMouseListener(new MouseAdapter() {
             }
         });
 
-        saveAs.setBackground(new java.awt.Color(204, 204, 255));
+        saveAs.setBackground(new java.awt.Color(254, 191, 61));
         saveAs.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/save as.png"))); // NOI18N
         saveAs.setEnabled(false);
         //saveAs.setEnabled(false);
@@ -400,7 +442,7 @@ closeButton.addMouseListener(new MouseAdapter() {
             }
         });
 
-        run.setBackground(new java.awt.Color(204, 204, 255));
+        run.setBackground(new java.awt.Color(254, 191, 61));
         run.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/run.png"))); // NOI18N
         run.setEnabled(false);
         run.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -414,7 +456,7 @@ closeButton.addMouseListener(new MouseAdapter() {
             }
         });
 
-        compile.setBackground(new java.awt.Color(204, 204, 255));
+        compile.setBackground(new java.awt.Color(254, 191, 61));
         compile.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/compile.png"))); // NOI18N
         compile.setEnabled(false);
         compile.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -428,7 +470,7 @@ closeButton.addMouseListener(new MouseAdapter() {
             }
         });
 
-        Note.setBackground(new java.awt.Color(204, 204, 255));
+        Note.setBackground(new java.awt.Color(254, 191, 61));
         Note.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/noteee.png"))); // NOI18N
         compile.setEnabled(false);
         Note.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -442,7 +484,7 @@ closeButton.addMouseListener(new MouseAdapter() {
             }
         });
 
-        highlight.setBackground(new java.awt.Color(204, 204, 255));
+        highlight.setBackground(new java.awt.Color(254, 191, 61));
         highlight.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/highlight.png"))); // NOI18N
         compile.setEnabled(false);
         highlight.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -456,7 +498,7 @@ closeButton.addMouseListener(new MouseAdapter() {
             }
         });
 
-        unhighlight.setBackground(new java.awt.Color(204, 204, 255));
+        unhighlight.setBackground(new java.awt.Color(254, 191, 61));
         unhighlight.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/unhighlight.png"))); // NOI18N
         compile.setEnabled(false);
         unhighlight.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -487,7 +529,7 @@ closeButton.addMouseListener(new MouseAdapter() {
                 .addComponent(run, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(compile, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 774, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(Note, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(highlight, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -514,68 +556,44 @@ closeButton.addMouseListener(new MouseAdapter() {
 
         //save.setEnabled(false);
 
-        redo.setBackground(new java.awt.Color(204, 204, 255));
-        redo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/redooo.png"))); // NOI18N
-        compile.setEnabled(false);
-        redo.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                redoMouseEntered(evt);
-            }
-        });
-        redo.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                redoActionPerformed(evt);
-            }
-        });
+        jDesktopPane1.setLayer(jTabbedPane1, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        jDesktopPane1.setLayer(jScrollPane1, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        jDesktopPane1.setLayer(undo, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        jDesktopPane1.setLayer(redo, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        jDesktopPane1.setLayer(jPanel1, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
-        undo.setBackground(new java.awt.Color(204, 204, 255));
-        undo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/undooo.png"))); // NOI18N
-        compile.setEnabled(false);
-        undo.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                undoMouseEntered(evt);
-            }
-        });
-        undo.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                undoActionPerformed(evt);
-            }
-        });
-
-        notes.setColumns(20);
-        notes.setRows(5);
-        jScrollPane1.setViewportView(notes);
-
-        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-        jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addGap(41, 41, 41)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
+        javax.swing.GroupLayout jDesktopPane1Layout = new javax.swing.GroupLayout(jDesktopPane1);
+        jDesktopPane1.setLayout(jDesktopPane1Layout);
+        jDesktopPane1Layout.setHorizontalGroup(
+            jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jDesktopPane1Layout.createSequentialGroup()
+                .addContainerGap(17, Short.MAX_VALUE)
+                .addGroup(jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jDesktopPane1Layout.createSequentialGroup()
+                        .addGroup(jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 1259, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 1259, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(23, 23, 23))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jDesktopPane1Layout.createSequentialGroup()
                         .addComponent(undo, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(redo, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jTabbedPane1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.LEADING))
-                .addGap(45, 45, 45))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(redo, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(53, 53, 53))))
         );
-        jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+        jDesktopPane1Layout.setVerticalGroup(
+            jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jDesktopPane1Layout.createSequentialGroup()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(24, 24, 24)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(undo, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(redo, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 494, Short.MAX_VALUE)
+                .addGap(48, 48, 48)
+                .addGroup(jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(redo, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(undo, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 448, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 159, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(38, 38, 38))
+                .addContainerGap(48, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addChangeListener(new ChangeListener() {
@@ -607,6 +625,17 @@ closeButton.addMouseListener(new MouseAdapter() {
                 }
             }
         });
+
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jDesktopPane1)
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jDesktopPane1, javax.swing.GroupLayout.Alignment.TRAILING)
+        );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -730,8 +759,6 @@ closeButton.addMouseListener(new MouseAdapter() {
         // TODO add your handling code here:
         saveAsFunction();
         saveAs.setEnabled(false);
-        run.setEnabled(true);
-        compile.setEnabled(true);
     }//GEN-LAST:event_saveAsActionPerformed
 
     private void saveAsMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_saveAsMouseEntered
@@ -828,6 +855,18 @@ closeButton.addMouseListener(new MouseAdapter() {
         newFile.setToolTipText("New File");
     }//GEN-LAST:event_newFileMouseEntered
 
+    private void compileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_compileActionPerformed
+        // TODO add your handling code here:
+        saveFunction();
+        compile Compile = new compile();
+        Compile.setVisible(true);
+    }//GEN-LAST:event_compileActionPerformed
+
+    private void compileMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_compileMouseEntered
+        // TODO add your handling code here:
+        compile.setToolTipText("Compile");
+    }//GEN-LAST:event_compileMouseEntered
+
     private void runActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_runActionPerformed
         // TODO add your handling code here:
         saveFunction();
@@ -844,18 +883,6 @@ closeButton.addMouseListener(new MouseAdapter() {
         // TODO add your handling code here:
         run.setToolTipText("Run");
     }//GEN-LAST:event_runMouseEntered
-
-    private void compileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_compileActionPerformed
-        // TODO add your handling code here:
-        saveFunction();
-        compile Compile = new compile();
-        Compile.setVisible(true);
-    }//GEN-LAST:event_compileActionPerformed
-
-    private void compileMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_compileMouseEntered
-        // TODO add your handling code here:
-        compile.setToolTipText("Compile");
-    }//GEN-LAST:event_compileMouseEntered
 
     
     /**
@@ -900,6 +927,7 @@ closeButton.addMouseListener(new MouseAdapter() {
     private javax.swing.JButton Note;
     private javax.swing.JButton compile;
     private javax.swing.JButton highlight;
+    private javax.swing.JDesktopPane jDesktopPane1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
