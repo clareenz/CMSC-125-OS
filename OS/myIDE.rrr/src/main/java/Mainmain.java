@@ -114,7 +114,13 @@ public class Mainmain extends javax.swing.JFrame {
         };
         jButton1 = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
-        jButton2 = new javax.swing.JButton();
+        NotepadButton = new javax.swing.JButton();
+        WordButton = new javax.swing.JButton();
+        SteamButton = new javax.swing.JButton();
+        FileManagerButton = new javax.swing.JButton();
+        ChromeButton = new javax.swing.JButton();
+        DotaButton = new javax.swing.JButton();
+        ExcelButton = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         jPanel3 = new javax.swing.JPanel();
         Widget = new javax.swing.JLabel();
@@ -140,39 +146,124 @@ public class Mainmain extends javax.swing.JFrame {
         jPanel1.setOpaque(false);
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Notepad.png"))); // NOI18N
-        jButton2.setBorderPainted(false);
-        jButton2.setContentAreaFilled(false);
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+        NotepadButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Notepad.png"))); // NOI18N
+        NotepadButton.setBorder(null);
+        NotepadButton.setBorderPainted(false);
+        NotepadButton.setContentAreaFilled(false);
+        NotepadButton.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                NotepadButtonMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                NotepadButtonMouseExited(evt);
             }
         });
-        jPanel1.add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(710, 40, -1, -1));
+        NotepadButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                NotepadButtonActionPerformed(evt);
+            }
+        });
+        jPanel1.add(NotepadButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(680, 10, 200, 220));
+
+        WordButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ProgramIcons/Word.png"))); // NOI18N
+        WordButton.setBorder(null);
+        WordButton.setBorderPainted(false);
+        WordButton.setContentAreaFilled(false);
+        WordButton.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                WordButtonMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                WordButtonMouseExited(evt);
+            }
+        });
+        jPanel1.add(WordButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 60, -1, -1));
+
+        SteamButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ProgramIcons/Steam.png"))); // NOI18N
+        SteamButton.setBorder(null);
+        SteamButton.setBorderPainted(false);
+        SteamButton.setContentAreaFilled(false);
+        SteamButton.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                SteamButtonMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                SteamButtonMouseExited(evt);
+            }
+        });
+        SteamButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                SteamButtonActionPerformed(evt);
+            }
+        });
+        jPanel1.add(SteamButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 40, -1, -1));
+
+        FileManagerButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ProgramIcons/FileManager.png"))); // NOI18N
+        FileManagerButton.setBorder(null);
+        FileManagerButton.setBorderPainted(false);
+        FileManagerButton.setContentAreaFilled(false);
+        FileManagerButton.setOpaque(false);
+        FileManagerButton.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                FileManagerButtonMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                FileManagerButtonMouseExited(evt);
+            }
+        });
+        jPanel1.add(FileManagerButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 30, 160, -1));
+
+        ChromeButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ProgramIcons/Chrome.png"))); // NOI18N
+        ChromeButton.setBorder(null);
+        ChromeButton.setBorderPainted(false);
+        ChromeButton.setContentAreaFilled(false);
+        ChromeButton.setLabel("");
+        ChromeButton.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                ChromeButtonMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                ChromeButtonMouseExited(evt);
+            }
+        });
+        jPanel1.add(ChromeButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(940, 30, -1, -1));
+
+        DotaButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ProgramIcons/Dota.png"))); // NOI18N
+        DotaButton.setBorder(null);
+        DotaButton.setBorderPainted(false);
+        DotaButton.setContentAreaFilled(false);
+        DotaButton.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                DotaButtonMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                DotaButtonMouseExited(evt);
+            }
+        });
+        jPanel1.add(DotaButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(1150, 40, -1, -1));
+
+        ExcelButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ProgramIcons/Excel.png"))); // NOI18N
+        ExcelButton.setBorder(null);
+        ExcelButton.setBorderPainted(false);
+        ExcelButton.setContentAreaFilled(false);
+        ExcelButton.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                ExcelButtonMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                ExcelButtonMouseExited(evt);
+            }
+        });
+        jPanel1.add(ExcelButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(1330, 50, -1, -1));
 
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Bar.png"))); // NOI18N
         jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(43, 0, -1, -1));
 
         jPanel3.setOpaque(false);
+        jPanel3.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         Widget.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Widget.png"))); // NOI18N
-
-        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
-        jPanel3.setLayout(jPanel3Layout);
-        jPanel3Layout.setHorizontalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel3Layout.createSequentialGroup()
-                .addGap(15, 15, 15)
-                .addComponent(Widget)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-        jPanel3Layout.setVerticalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel3Layout.createSequentialGroup()
-                .addGap(23, 23, 23)
-                .addComponent(Widget)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
+        jPanel3.add(Widget, new org.netbeans.lib.awtextra.AbsoluteConstraints(15, 23, -1, -1));
 
         jDesktopPane1.setLayer(jButton1, javax.swing.JLayeredPane.DEFAULT_LAYER);
         jDesktopPane1.setLayer(jPanel1, javax.swing.JLayeredPane.DEFAULT_LAYER);
@@ -187,7 +278,7 @@ public class Mainmain extends javax.swing.JFrame {
                     .addGroup(jDesktopPane1Layout.createSequentialGroup()
                         .addGap(29, 29, 29)
                         .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(1101, 1101, 1101)
+                        .addGap(1110, 1110, 1110)
                         .addComponent(jButton1))
                     .addGroup(jDesktopPane1Layout.createSequentialGroup()
                         .addGap(174, 174, 174)
@@ -204,7 +295,7 @@ public class Mainmain extends javax.swing.JFrame {
                     .addGroup(jDesktopPane1Layout.createSequentialGroup()
                         .addGap(30, 30, 30)
                         .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 175, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 181, Short.MAX_VALUE)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(80, 80, 80))
         );
@@ -266,9 +357,83 @@ public class Mainmain extends javax.swing.JFrame {
         //dispose();
     }//GEN-LAST:event_jButton1ActionPerformed
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+    private void NotepadButtonMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_NotepadButtonMouseEntered
         // TODO add your handling code here:
-    }//GEN-LAST:event_jButton2ActionPerformed
+        NotepadButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ProgramIcons/NotepadHover.png"))); // NOI18N
+    }//GEN-LAST:event_NotepadButtonMouseEntered
+
+    private void NotepadButtonMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_NotepadButtonMouseExited
+        // TODO add your handling code here:
+        NotepadButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ProgramIcons/Notepad.png")));
+    }//GEN-LAST:event_NotepadButtonMouseExited
+
+    private void NotepadButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_NotepadButtonActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_NotepadButtonActionPerformed
+
+    private void FileManagerButtonMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_FileManagerButtonMouseEntered
+        // TODO add your handling code here:
+        FileManagerButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ProgramIcons/FileManagerHover.png")));
+    }//GEN-LAST:event_FileManagerButtonMouseEntered
+
+    private void FileManagerButtonMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_FileManagerButtonMouseExited
+        // TODO add your handling code here:
+        FileManagerButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ProgramIcons/FileManager.png")));
+    }//GEN-LAST:event_FileManagerButtonMouseExited
+
+    private void ChromeButtonMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ChromeButtonMouseEntered
+        // TODO add your handling code here:
+        ChromeButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ProgramIcons/ChromeHover.png")));
+    }//GEN-LAST:event_ChromeButtonMouseEntered
+
+    private void ChromeButtonMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ChromeButtonMouseExited
+        // TODO add your handling code here:
+        ChromeButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ProgramIcons/Chrome.png")));
+    }//GEN-LAST:event_ChromeButtonMouseExited
+
+    private void SteamButtonMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_SteamButtonMouseEntered
+        // TODO add your handling code here:
+        SteamButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ProgramIcons/SteamHover.png")));
+    }//GEN-LAST:event_SteamButtonMouseEntered
+
+    private void SteamButtonMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_SteamButtonMouseExited
+        // TODO add your handling code here:
+        SteamButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ProgramIcons/Steam.png")));
+    }//GEN-LAST:event_SteamButtonMouseExited
+
+    private void WordButtonMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_WordButtonMouseEntered
+        // TODO add your handling code here:
+        WordButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ProgramIcons/WordHover.png")));
+    }//GEN-LAST:event_WordButtonMouseEntered
+
+    private void WordButtonMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_WordButtonMouseExited
+        // TODO add your handling code here:
+        WordButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ProgramIcons/Word.png")));
+    }//GEN-LAST:event_WordButtonMouseExited
+
+    private void DotaButtonMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_DotaButtonMouseEntered
+        // TODO add your handling code here:
+        DotaButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ProgramIcons/DotaHover.png")));
+    }//GEN-LAST:event_DotaButtonMouseEntered
+
+    private void DotaButtonMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_DotaButtonMouseExited
+        // TODO add your handling code here:
+        DotaButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ProgramIcons/Dota.png")));
+    }//GEN-LAST:event_DotaButtonMouseExited
+
+    private void ExcelButtonMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ExcelButtonMouseEntered
+        // TODO add your handling code here:
+        ExcelButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ProgramIcons/ExcelHover.png")));
+    }//GEN-LAST:event_ExcelButtonMouseEntered
+
+    private void ExcelButtonMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ExcelButtonMouseExited
+        // TODO add your handling code here:
+        ExcelButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ProgramIcons/Excel.png")));
+    }//GEN-LAST:event_ExcelButtonMouseExited
+
+    private void SteamButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SteamButtonActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_SteamButtonActionPerformed
 
     /**
      * @param args the command line arguments
@@ -307,9 +472,15 @@ public class Mainmain extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton ChromeButton;
+    private javax.swing.JButton DotaButton;
+    private javax.swing.JButton ExcelButton;
+    private javax.swing.JButton FileManagerButton;
+    private javax.swing.JButton NotepadButton;
+    private javax.swing.JButton SteamButton;
     private javax.swing.JLabel Widget;
+    private javax.swing.JButton WordButton;
     private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
     private javax.swing.JDesktopPane jDesktopPane1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
