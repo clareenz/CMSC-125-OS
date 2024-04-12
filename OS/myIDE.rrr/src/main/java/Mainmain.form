@@ -357,7 +357,7 @@
                         </Constraint>
                       </Constraints>
                     </Component>
-                    <Component class="javax.swing.JLabel" name="jLabel2">
+                    <Component class="javax.swing.JLabel" name="Time">
                       <Properties>
                         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                           <Font name="Arial" size="170" style="1"/>
@@ -367,6 +367,9 @@
                         </Property>
                         <Property name="text" type="java.lang.String" value="88:88"/>
                       </Properties>
+                      <AuxValues>
+                        <AuxValue name="JavaCodeGenerator_CreateCodePre" type="java.lang.String" value="Timer timer = new Timer(1000, new ActionListener() {&#xd;&#xa;            @Override&#xd;&#xa;            public void actionPerformed(ActionEvent e) {&#xd;&#xa;                // Update the label with the current time&#xd;&#xa;                Date currentTime = new Date();&#xd;&#xa;&#xd;&#xa;                SimpleDateFormat sdf = new SimpleDateFormat(&quot;HH:mm&quot;);&#xd;&#xa;                Time.setText(sdf.format(currentTime));&#xd;&#xa;&#xd;&#xa;                 sdf.applyPattern(&quot;a&quot;);&#xd;&#xa;                amPm.setText(sdf.format(currentTime));&#xd;&#xa;                &#xd;&#xa;                SimpleDateFormat dateFormat = new SimpleDateFormat(&quot;MMMM dd, yyyy&quot;);&#xd;&#xa;                Date.setText(dateFormat.format(currentTime));&#xd;&#xa;                &#xd;&#xa;            }&#xd;&#xa;        });&#xd;&#xa;        timer.start();"/>
+                      </AuxValues>
                       <Constraints>
                         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
                           <AbsoluteConstraints x="40" y="190" width="-1" height="-1"/>

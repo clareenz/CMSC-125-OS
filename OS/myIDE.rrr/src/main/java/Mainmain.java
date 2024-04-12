@@ -42,6 +42,8 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.undo.CannotRedoException;
@@ -126,7 +128,25 @@ public class Mainmain extends javax.swing.JFrame {
         DatePanel = new javax.swing.JPanel();
         Country = new javax.swing.JLabel();
         Date = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
+        Timer timer = new Timer(1000, new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Update the label with the current time
+                Date currentTime = new Date();
+
+                SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
+                Time.setText(sdf.format(currentTime));
+
+                sdf.applyPattern("a");
+                amPm.setText(sdf.format(currentTime));
+
+                SimpleDateFormat dateFormat = new SimpleDateFormat("MMMM dd, yyyy");
+                Date.setText(dateFormat.format(currentTime));
+
+            }
+        });
+        timer.start();
+        Time = new javax.swing.JLabel();
         timeWidget = new javax.swing.JLabel();
         amPm = new javax.swing.JLabel();
         dateWidget = new javax.swing.JLabel();
@@ -281,10 +301,10 @@ public class Mainmain extends javax.swing.JFrame {
         Date.setText("April 12, 2024");
         DatePanel.add(Date, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 120, -1, -1));
 
-        jLabel2.setFont(new java.awt.Font("Arial", 1, 170)); // NOI18N
-        jLabel2.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel2.setText("88:88");
-        DatePanel.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 190, -1, -1));
+        Time.setFont(new java.awt.Font("Arial", 1, 170)); // NOI18N
+        Time.setForeground(new java.awt.Color(0, 0, 0));
+        Time.setText("88:88");
+        DatePanel.add(Time, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 190, -1, -1));
 
         timeWidget.setIcon(new javax.swing.ImageIcon(getClass().getResource("/TimeWidget.png"))); // NOI18N
         DatePanel.add(timeWidget, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 190, 470, -1));
@@ -534,6 +554,7 @@ public class Mainmain extends javax.swing.JFrame {
     private javax.swing.JPanel MusicPanel;
     private javax.swing.JButton NotepadButton;
     private javax.swing.JButton SteamButton;
+    private javax.swing.JLabel Time;
     private javax.swing.JLabel Widget;
     private javax.swing.JButton WordButton;
     private javax.swing.JLabel amPm;
@@ -541,7 +562,6 @@ public class Mainmain extends javax.swing.JFrame {
     private javax.swing.JButton jButton1;
     private javax.swing.JDesktopPane jDesktopPane1;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
