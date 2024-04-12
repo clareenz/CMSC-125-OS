@@ -123,6 +123,14 @@ public class Mainmain extends javax.swing.JFrame {
         ExcelButton = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         jPanel3 = new javax.swing.JPanel();
+        DatePanel = new javax.swing.JPanel();
+        Country = new javax.swing.JLabel();
+        Date = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        timeWidget = new javax.swing.JLabel();
+        amPm = new javax.swing.JLabel();
+        dateWidget = new javax.swing.JLabel();
+        MusicPanel = new javax.swing.JPanel();
         Widget = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
@@ -202,7 +210,6 @@ public class Mainmain extends javax.swing.JFrame {
         FileManagerButton.setBorder(null);
         FileManagerButton.setBorderPainted(false);
         FileManagerButton.setContentAreaFilled(false);
-        FileManagerButton.setOpaque(false);
         FileManagerButton.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 FileManagerButtonMouseEntered(evt);
@@ -217,7 +224,6 @@ public class Mainmain extends javax.swing.JFrame {
         ChromeButton.setBorder(null);
         ChromeButton.setBorderPainted(false);
         ChromeButton.setContentAreaFilled(false);
-        ChromeButton.setLabel("");
         ChromeButton.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 ChromeButtonMouseEntered(evt);
@@ -262,8 +268,54 @@ public class Mainmain extends javax.swing.JFrame {
         jPanel3.setOpaque(false);
         jPanel3.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
+        DatePanel.setOpaque(false);
+        DatePanel.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        Country.setFont(new java.awt.Font("Arial", 1, 64)); // NOI18N
+        Country.setForeground(new java.awt.Color(224, 0, 0));
+        Country.setText("PHILIPPINES");
+        DatePanel.add(Country, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 50, -1, -1));
+
+        Date.setFont(new java.awt.Font("Arial", 0, 30)); // NOI18N
+        Date.setForeground(new java.awt.Color(0, 0, 0));
+        Date.setText("April 12, 2024");
+        DatePanel.add(Date, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 120, -1, -1));
+
+        jLabel2.setFont(new java.awt.Font("Arial", 1, 170)); // NOI18N
+        jLabel2.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel2.setText("88:88");
+        DatePanel.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 190, -1, -1));
+
+        timeWidget.setIcon(new javax.swing.ImageIcon(getClass().getResource("/TimeWidget.png"))); // NOI18N
+        DatePanel.add(timeWidget, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 190, 470, -1));
+
+        amPm.setFont(new java.awt.Font("Arial", 1, 60)); // NOI18N
+        amPm.setForeground(new java.awt.Color(224, 0, 0));
+        amPm.setText("am");
+        DatePanel.add(amPm, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 310, -1, -1));
+
+        dateWidget.setIcon(new javax.swing.ImageIcon(getClass().getResource("/WidgetDate.png"))); // NOI18N
+        DatePanel.add(dateWidget, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 20, 680, -1));
+
+        jPanel3.add(DatePanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 10, 680, 450));
+
+        MusicPanel.setOpaque(false);
+
+        javax.swing.GroupLayout MusicPanelLayout = new javax.swing.GroupLayout(MusicPanel);
+        MusicPanel.setLayout(MusicPanelLayout);
+        MusicPanelLayout.setHorizontalGroup(
+            MusicPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 260, Short.MAX_VALUE)
+        );
+        MusicPanelLayout.setVerticalGroup(
+            MusicPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 450, Short.MAX_VALUE)
+        );
+
+        jPanel3.add(MusicPanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(700, 10, 260, 450));
+
         Widget.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Widget.png"))); // NOI18N
-        jPanel3.add(Widget, new org.netbeans.lib.awtextra.AbsoluteConstraints(15, 23, -1, -1));
+        jPanel3.add(Widget, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
 
         jDesktopPane1.setLayer(jButton1, javax.swing.JLayeredPane.DEFAULT_LAYER);
         jDesktopPane1.setLayer(jPanel1, javax.swing.JLayeredPane.DEFAULT_LAYER);
@@ -295,7 +347,7 @@ public class Mainmain extends javax.swing.JFrame {
                     .addGroup(jDesktopPane1Layout.createSequentialGroup()
                         .addGap(30, 30, 30)
                         .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 181, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 273, Short.MAX_VALUE)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(80, 80, 80))
         );
@@ -473,18 +525,26 @@ public class Mainmain extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton ChromeButton;
+    private javax.swing.JLabel Country;
+    private javax.swing.JLabel Date;
+    private javax.swing.JPanel DatePanel;
     private javax.swing.JButton DotaButton;
     private javax.swing.JButton ExcelButton;
     private javax.swing.JButton FileManagerButton;
+    private javax.swing.JPanel MusicPanel;
     private javax.swing.JButton NotepadButton;
     private javax.swing.JButton SteamButton;
     private javax.swing.JLabel Widget;
     private javax.swing.JButton WordButton;
+    private javax.swing.JLabel amPm;
+    private javax.swing.JLabel dateWidget;
     private javax.swing.JButton jButton1;
     private javax.swing.JDesktopPane jDesktopPane1;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
+    private javax.swing.JLabel timeWidget;
     // End of variables declaration//GEN-END:variables
 }
