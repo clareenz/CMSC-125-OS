@@ -161,6 +161,8 @@ public class Mainmain extends javax.swing.JFrame {
         DeleteFile = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         fileList = new javax.swing.JList<>();
+        String userHome = System.getProperty("user.home");         
+        fileList = new JList<>(getFilesInDirectory(userHome + File.separator + "Desktop\\HoneyOS_Documents"));
         FileManagerWindow = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
@@ -357,6 +359,11 @@ public class Mainmain extends javax.swing.JFrame {
         OpenFile.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ProgramIcons/OpenFile.png"))); // NOI18N
         OpenFile.setBorderPainted(false);
         OpenFile.setContentAreaFilled(false);
+        OpenFile.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                OpenFileActionPerformed(evt);
+            }
+        });
         jPanel4.add(OpenFile, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 30, -1, -1));
 
         DeleteFile.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ProgramIcons/DeleteFile.png"))); // NOI18N
@@ -372,11 +379,6 @@ public class Mainmain extends javax.swing.JFrame {
         jScrollPane1.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
 
         fileList.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
-        fileList.setModel(new javax.swing.AbstractListModel<String>() {
-            String[] strings = { "sample" };
-            public int getSize() { return strings.length; }
-            public String getElementAt(int i) { return strings[i]; }
-        });
         jScrollPane1.setViewportView(fileList);
 
         jPanel4.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 140, 520, 210));
@@ -558,6 +560,11 @@ public class Mainmain extends javax.swing.JFrame {
         fileManager.setVisible(true);
     }//GEN-LAST:event_FileManagerButtonActionPerformed
 
+    private void OpenFileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_OpenFileActionPerformed
+        // TODO add your handling code here:
+        openFile();
+    }//GEN-LAST:event_OpenFileActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -568,6 +575,22 @@ public class Mainmain extends javax.swing.JFrame {
             new FileManager().setVisible(true); // Create and show a new instance of FileManager
         });
     }
+    
+    private void openFile(){
+        String userHome = System.getProperty("user.home");
+        int selectedIndex = fileList.getSelectedIndex();
+        if (selectedIndex != -1) {
+            String selectedFileName = fileList.getSelectedValue();
+            File fileToOpen = new File(userHome + File.separator + "Desktop\\HoneyOS_Documents" + File.separator + selectedFileName);
+            app newApp = new app();
+            newApp.openFileFromOutside(fileToOpen);
+            newApp.setVisible(true);
+        } else {
+            JOptionPane.showMessageDialog(this, "Please select a file to open!", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+        
+    }
+    
     private void createNewFile() {
         String userHome = System.getProperty("user.home");
         String fileName = JOptionPane.showInputDialog(this, "Enter the name of the new file:");

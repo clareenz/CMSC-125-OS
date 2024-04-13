@@ -75,6 +75,11 @@ public class FileManager extends javax.swing.JFrame {
         OpenFile.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ProgramIcons/OpenFile.png"))); // NOI18N
         OpenFile.setBorderPainted(false);
         OpenFile.setContentAreaFilled(false);
+        OpenFile.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                OpenFileActionPerformed(evt);
+            }
+        });
         jPanel4.add(OpenFile, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 30, -1, -1));
 
         DeleteFile.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ProgramIcons/DeleteFile.png"))); // NOI18N
@@ -128,6 +133,11 @@ public class FileManager extends javax.swing.JFrame {
         deleteSelectedFile();
     }//GEN-LAST:event_DeleteFileActionPerformed
 
+    private void OpenFileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_OpenFileActionPerformed
+        // TODO add your handling code here:
+        openFile();
+    }//GEN-LAST:event_OpenFileActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -137,6 +147,20 @@ public class FileManager extends javax.swing.JFrame {
             dispose(); // Dispose the frame
             new FileManager().setVisible(true); // Create and show a new instance of FileManager
         });
+    }
+    private void openFile(){
+        String userHome = System.getProperty("user.home");
+        int selectedIndex = fileList.getSelectedIndex();
+        if (selectedIndex != -1) {
+            String selectedFileName = fileList.getSelectedValue();
+            File fileToOpen = new File(userHome + File.separator + "Desktop\\HoneyOS_Documents" + File.separator + selectedFileName);
+            app newApp = new app();
+            newApp.openFileFromOutside(fileToOpen);
+            newApp.setVisible(true);
+        } else {
+            JOptionPane.showMessageDialog(this, "Please select a file to open!", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+        
     }
     private void createNewFile() {
         String userHome = System.getProperty("user.home");
