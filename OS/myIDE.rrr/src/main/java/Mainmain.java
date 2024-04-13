@@ -114,7 +114,6 @@ public class Mainmain extends javax.swing.JFrame {
             }
 
         };
-        jButton1 = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
         NotepadButton = new javax.swing.JButton();
         WordButton = new javax.swing.JButton();
@@ -152,6 +151,11 @@ public class Mainmain extends javax.swing.JFrame {
         dateWidget = new javax.swing.JLabel();
         MusicPanel = new javax.swing.JPanel();
         Widget = new javax.swing.JLabel();
+        jPanel4 = new javax.swing.JPanel();
+        NewFile = new javax.swing.JButton();
+        OpenFile = new javax.swing.JButton();
+        DeleteFile = new javax.swing.JButton();
+        FileManagerWindow = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle(Filename);
@@ -161,15 +165,6 @@ public class Mainmain extends javax.swing.JFrame {
         jPanel2.setBackground(new java.awt.Color(209, 197, 223));
         jPanel2.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jPanel2.setPreferredSize(new java.awt.Dimension(2000, 2000));
-
-        jButton1.setBackground(new java.awt.Color(254, 191, 61));
-        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/notepad1.png"))); // NOI18N
-        jButton1.setText("notepad");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
-            }
-        });
 
         jPanel1.setOpaque(false);
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -297,12 +292,10 @@ public class Mainmain extends javax.swing.JFrame {
         DatePanel.add(Country, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 50, -1, -1));
 
         Date.setFont(new java.awt.Font("Arial", 0, 30)); // NOI18N
-        Date.setForeground(new java.awt.Color(0, 0, 0));
         Date.setText("April 12, 2024");
         DatePanel.add(Date, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 120, -1, -1));
 
         Time.setFont(new java.awt.Font("Arial", 1, 170)); // NOI18N
-        Time.setForeground(new java.awt.Color(0, 0, 0));
         Time.setText("88:88");
         DatePanel.add(Time, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 190, -1, -1));
 
@@ -337,9 +330,39 @@ public class Mainmain extends javax.swing.JFrame {
         Widget.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Widget.png"))); // NOI18N
         jPanel3.add(Widget, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
 
-        jDesktopPane1.setLayer(jButton1, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        jPanel4.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        NewFile.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ProgramIcons/NewFile.png"))); // NOI18N
+        NewFile.setBorderPainted(false);
+        NewFile.setContentAreaFilled(false);
+        NewFile.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                NewFileActionPerformed(evt);
+            }
+        });
+        jPanel4.add(NewFile, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 30, -1, -1));
+
+        OpenFile.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ProgramIcons/OpenFile.png"))); // NOI18N
+        OpenFile.setBorderPainted(false);
+        OpenFile.setContentAreaFilled(false);
+        jPanel4.add(OpenFile, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 30, -1, -1));
+
+        DeleteFile.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ProgramIcons/DeleteFile.png"))); // NOI18N
+        DeleteFile.setBorderPainted(false);
+        DeleteFile.setContentAreaFilled(false);
+        DeleteFile.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                DeleteFileActionPerformed(evt);
+            }
+        });
+        jPanel4.add(DeleteFile, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 30, -1, -1));
+
+        FileManagerWindow.setIcon(new javax.swing.ImageIcon(getClass().getResource("/FileManagerWindow.png"))); // NOI18N
+        jPanel4.add(FileManagerWindow, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 10, -1, -1));
+
         jDesktopPane1.setLayer(jPanel1, javax.swing.JLayeredPane.DEFAULT_LAYER);
         jDesktopPane1.setLayer(jPanel3, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        jDesktopPane1.setLayer(jPanel4, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         javax.swing.GroupLayout jDesktopPane1Layout = new javax.swing.GroupLayout(jDesktopPane1);
         jDesktopPane1.setLayout(jDesktopPane1Layout);
@@ -350,23 +373,20 @@ public class Mainmain extends javax.swing.JFrame {
                     .addGroup(jDesktopPane1Layout.createSequentialGroup()
                         .addGap(29, 29, 29)
                         .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(1110, 1110, 1110)
-                        .addComponent(jButton1))
+                        .addGap(18, 18, 18)
+                        .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, 842, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jDesktopPane1Layout.createSequentialGroup()
                         .addGap(174, 174, 174)
                         .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(475, Short.MAX_VALUE))
+                .addContainerGap(823, Short.MAX_VALUE))
         );
         jDesktopPane1Layout.setVerticalGroup(
             jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jDesktopPane1Layout.createSequentialGroup()
-                .addGroup(jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jDesktopPane1Layout.createSequentialGroup()
-                        .addGap(130, 130, 130)
-                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jDesktopPane1Layout.createSequentialGroup()
-                        .addGap(30, 30, 30)
-                        .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(30, 30, 30)
+                .addGroup(jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 273, Short.MAX_VALUE)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(80, 80, 80))
@@ -417,17 +437,6 @@ public class Mainmain extends javax.swing.JFrame {
         return null;
     }
 
-
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
-        // Open the app page or perform any desired action
-
-        // For example, if you want to open another JFrame named "AppPage":
-        app appPage = new app();
-        appPage.setVisible(true);
-        // You can also dispose the current frame if needed
-        //dispose();
-    }//GEN-LAST:event_jButton1ActionPerformed
 
     private void NotepadButtonMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_NotepadButtonMouseEntered
         // TODO add your handling code here:
@@ -507,6 +516,14 @@ public class Mainmain extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_SteamButtonActionPerformed
 
+    private void NewFileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_NewFileActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_NewFileActionPerformed
+
+    private void DeleteFileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_DeleteFileActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_DeleteFileActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -548,23 +565,27 @@ public class Mainmain extends javax.swing.JFrame {
     private javax.swing.JLabel Country;
     private javax.swing.JLabel Date;
     private javax.swing.JPanel DatePanel;
+    private javax.swing.JButton DeleteFile;
     private javax.swing.JButton DotaButton;
     private javax.swing.JButton ExcelButton;
     private javax.swing.JButton FileManagerButton;
+    private javax.swing.JLabel FileManagerWindow;
     private javax.swing.JPanel MusicPanel;
+    private javax.swing.JButton NewFile;
     private javax.swing.JButton NotepadButton;
+    private javax.swing.JButton OpenFile;
     private javax.swing.JButton SteamButton;
     private javax.swing.JLabel Time;
     private javax.swing.JLabel Widget;
     private javax.swing.JButton WordButton;
     private javax.swing.JLabel amPm;
     private javax.swing.JLabel dateWidget;
-    private javax.swing.JButton jButton1;
     private javax.swing.JDesktopPane jDesktopPane1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
+    private javax.swing.JPanel jPanel4;
     private javax.swing.JLabel timeWidget;
     // End of variables declaration//GEN-END:variables
 }
