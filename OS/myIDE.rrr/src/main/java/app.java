@@ -568,12 +568,12 @@ closeButton.addMouseListener(new MouseAdapter() {
             jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jDesktopPane1Layout.createSequentialGroup()
-                .addContainerGap(17, Short.MAX_VALUE)
+                .addGap(17, 17, 17)
                 .addGroup(jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jDesktopPane1Layout.createSequentialGroup()
                         .addGroup(jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 1259, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 1259, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 1259, Short.MAX_VALUE)
+                            .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addGap(23, 23, 23))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jDesktopPane1Layout.createSequentialGroup()
                         .addComponent(undo, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -884,7 +884,63 @@ closeButton.addMouseListener(new MouseAdapter() {
         run.setToolTipText("Run");
     }//GEN-LAST:event_runMouseEntered
 
+    public void openFileFromOutside(File selectedFile){
+        StringBuilder fileContents = new StringBuilder();
+        try{
+        
+                BufferedReader reader = new BufferedReader(new FileReader(selectedFile));
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    fileContents.append(line).append("\n");
+                }
+                reader.close();
+                JPanel newTab = new JPanel(new BorderLayout());
+                JTextArea textArea = new JTextArea();
+                textArea.setWrapStyleWord(true);
+                textArea.setLineWrap(true);
+                JScrollPane scrollPane = new JScrollPane(textArea);
+                newTab.add(scrollPane, BorderLayout.CENTER);
+                textArea.setText(fileContents.toString());
+                textArea.getDocument().addDocumentListener(new DocumentListener(){
+                    @Override
+                    public void insertUpdate(DocumentEvent e){
+                        updateLabel();
+                    }
+
+                    @Override
+                    public void removeUpdate(DocumentEvent e){
+                        updateLabel();
+                    }
+
+                    @Override
+                    public void changedUpdate(DocumentEvent e){
+                        updateLabel();
+                    }
+
+                    private void updateLabel(){
+                        saved.set(jTabbedPane1.getSelectedIndex(), false);
+                        saveAs.setEnabled(true);
+                        save.setEnabled(true);
+                    }
+                });
+                Filename = selectedFile.getAbsolutePath();
+                fname = selectedFile.getName();
+                fileNames.add(Filename);
+                saved.add(true);
+                int tabCount = jTabbedPane1.getTabCount() + 1;
+                jTabbedPane1.addTab("Tab " + tabCount, newTab);
+                jTabbedPane1.setSelectedIndex(tabCount - 1);
+                jTabbedPane1.setTabComponentAt(jTabbedPane1.indexOfComponent(newTab),getTitlePanel(jTabbedPane1, newTab, fname));
+                setTitle(Filename);
+                save.setEnabled(false);
+                saveAs.setEnabled(false);
     
+        }catch (IOException e){
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Error reading the file.", "Error", JOptionPane.ERROR_MESSAGE);
+
+        }
+    }
     /**
      * @param args the command line arguments
      */
