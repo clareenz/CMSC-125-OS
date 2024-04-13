@@ -48,7 +48,11 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.undo.CannotRedoException;
 import javax.swing.undo.CannotUndoException;
-
+import java.io.File;
+import java.io.IOException;
+import javax.swing.JList;
+import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
@@ -155,6 +159,8 @@ public class Mainmain extends javax.swing.JFrame {
         NewFile = new javax.swing.JButton();
         OpenFile = new javax.swing.JButton();
         DeleteFile = new javax.swing.JButton();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        fileList = new javax.swing.JList<>();
         FileManagerWindow = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
@@ -231,6 +237,11 @@ public class Mainmain extends javax.swing.JFrame {
             }
             public void mouseExited(java.awt.event.MouseEvent evt) {
                 FileManagerButtonMouseExited(evt);
+            }
+        });
+        FileManagerButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                FileManagerButtonActionPerformed(evt);
             }
         });
         jPanel1.add(FileManagerButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 30, 160, -1));
@@ -351,7 +362,24 @@ public class Mainmain extends javax.swing.JFrame {
         DeleteFile.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ProgramIcons/DeleteFile.png"))); // NOI18N
         DeleteFile.setBorderPainted(false);
         DeleteFile.setContentAreaFilled(false);
+        DeleteFile.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                DeleteFileActionPerformed(evt);
+            }
+        });
         jPanel4.add(DeleteFile, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 30, -1, -1));
+
+        jScrollPane1.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
+
+        fileList.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
+        fileList.setModel(new javax.swing.AbstractListModel<String>() {
+            String[] strings = { "sample" };
+            public int getSize() { return strings.length; }
+            public String getElementAt(int i) { return strings[i]; }
+        });
+        jScrollPane1.setViewportView(fileList);
+
+        jPanel4.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 140, 520, 210));
 
         FileManagerWindow.setIcon(new javax.swing.ImageIcon(getClass().getResource("/FileManagerWindow.png"))); // NOI18N
         jPanel4.add(FileManagerWindow, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 10, -1, -1));
@@ -446,6 +474,8 @@ public class Mainmain extends javax.swing.JFrame {
 
     private void NotepadButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_NotepadButtonActionPerformed
         // TODO add your handling code here:
+        app appPage = new app();
+        appPage.setVisible(true);
     }//GEN-LAST:event_NotepadButtonActionPerformed
 
     private void FileManagerButtonMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_FileManagerButtonMouseEntered
@@ -514,11 +544,103 @@ public class Mainmain extends javax.swing.JFrame {
 
     private void NewFileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_NewFileActionPerformed
         // TODO add your handling code here:
+        createNewFile();
     }//GEN-LAST:event_NewFileActionPerformed
+
+    private void DeleteFileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_DeleteFileActionPerformed
+        // TODO add your handling code here:
+        deleteSelectedFile();
+    }//GEN-LAST:event_DeleteFileActionPerformed
+
+    private void FileManagerButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_FileManagerButtonActionPerformed
+        // TODO add your handling code here:
+        FileManager fileManager = new FileManager();
+        fileManager.setVisible(true);
+    }//GEN-LAST:event_FileManagerButtonActionPerformed
 
     /**
      * @param args the command line arguments
      */
+    private void refreshFrame() {
+        SwingUtilities.invokeLater(() -> {
+            setVisible(false); // Hide the frame
+            dispose(); // Dispose the frame
+            new FileManager().setVisible(true); // Create and show a new instance of FileManager
+        });
+    }
+    private void createNewFile() {
+        String userHome = System.getProperty("user.home");
+        String fileName = JOptionPane.showInputDialog(this, "Enter the name of the new file:");
+        fileName = fileName + ".txt";
+        if (fileName != null && !fileName.isEmpty()) {
+            File newFile = new File(userHome + File.separator + "Desktop\\HoneyOS_Documents" + File.separator + fileName);
+            try {
+                if (newFile.createNewFile()) {
+                    JOptionPane.showMessageDialog(this, "New file created: " + fileName);
+                    refreshFrame();
+                } else {
+                    JOptionPane.showMessageDialog(this, "File already exists!", "Error", JOptionPane.ERROR_MESSAGE);
+                }
+            } catch (IOException ex) {
+                JOptionPane.showMessageDialog(this, "Error creating file: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+                
+        fileList = new JList<>(getFilesInDirectory(userHome + File.separator + "Desktop\\HoneyOS_Documents"));
+    }
+ private String[] getFilesInDirectory(String directoryPath) {
+    File directory = new File(directoryPath);
+    if (!directory.exists()) {
+        System.out.println("Directory does not exist. Creating directory...");
+        boolean created = directory.mkdirs(); // Attempt to create the directory
+        if (!created) {
+            System.err.println("Failed to create directory: " + directoryPath);
+            return new String[0];
+        }
+    }
+
+    File[] files = directory.listFiles();
+    if (files != null && files.length > 0) {
+        
+        System.out.println("Files in directory:");
+        for (File file : files) {
+            if (file.isFile()) { // Check if it's a regular file
+                System.out.println(file.getName());
+            }
+        }
+        
+        String[] fileNames = new String[files.length];
+        for (int i = 0; i < files.length; i++) {
+            fileNames[i] = files[i].getName();
+        }
+        return fileNames;
+    } else {
+        System.out.println("No files found in directory: " + directoryPath);
+        return new String[0];
+    }
+
+}
+
+ private void deleteSelectedFile() {
+     String userHome = System.getProperty("user.home");
+        int selectedIndex = fileList.getSelectedIndex();
+        if (selectedIndex != -1) {
+            String selectedFileName = fileList.getSelectedValue();
+            int confirm = JOptionPane.showConfirmDialog(this, "Are you sure you want to delete the file: " + selectedFileName + "?", "Confirm Deletion", JOptionPane.YES_NO_OPTION);
+            if (confirm == JOptionPane.YES_OPTION) {
+                File fileToDelete = new File(userHome + File.separator + "Desktop\\HoneyOS_Documents" + File.separator + selectedFileName);
+                if (fileToDelete.delete()) {
+                    JOptionPane.showMessageDialog(this, "File deleted: " + selectedFileName);
+                    refreshFrame(); // Refresh the frame after deleting the file
+                } else {
+                    JOptionPane.showMessageDialog(this, "Error deleting file!", "Error", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        } else {
+            JOptionPane.showMessageDialog(this, "Please select a file to delete!", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+ }
+ 
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
@@ -572,12 +694,14 @@ public class Mainmain extends javax.swing.JFrame {
     private javax.swing.JButton WordButton;
     private javax.swing.JLabel amPm;
     private javax.swing.JLabel dateWidget;
+    private javax.swing.JList<String> fileList;
     private javax.swing.JDesktopPane jDesktopPane1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel timeWidget;
     // End of variables declaration//GEN-END:variables
 }
