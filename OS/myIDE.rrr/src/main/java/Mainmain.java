@@ -330,6 +330,7 @@ public class Mainmain extends javax.swing.JFrame {
         Widget.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Widget.png"))); // NOI18N
         jPanel3.add(Widget, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
 
+        jPanel4.setOpaque(false);
         jPanel4.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         NewFile.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ProgramIcons/NewFile.png"))); // NOI18N
@@ -350,11 +351,6 @@ public class Mainmain extends javax.swing.JFrame {
         DeleteFile.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ProgramIcons/DeleteFile.png"))); // NOI18N
         DeleteFile.setBorderPainted(false);
         DeleteFile.setContentAreaFilled(false);
-        DeleteFile.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                DeleteFileActionPerformed(evt);
-            }
-        });
         jPanel4.add(DeleteFile, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 30, -1, -1));
 
         FileManagerWindow.setIcon(new javax.swing.ImageIcon(getClass().getResource("/FileManagerWindow.png"))); // NOI18N
@@ -371,9 +367,9 @@ public class Mainmain extends javax.swing.JFrame {
             .addGroup(jDesktopPane1Layout.createSequentialGroup()
                 .addGroup(jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jDesktopPane1Layout.createSequentialGroup()
-                        .addGap(29, 29, 29)
+                        .addGap(82, 82, 82)
                         .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, 842, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jDesktopPane1Layout.createSequentialGroup()
                         .addGap(174, 174, 174)
@@ -383,11 +379,11 @@ public class Mainmain extends javax.swing.JFrame {
         jDesktopPane1Layout.setVerticalGroup(
             jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jDesktopPane1Layout.createSequentialGroup()
-                .addGap(30, 30, 30)
-                .addGroup(jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 273, Short.MAX_VALUE)
+                .addGap(80, 80, 80)
+                .addGroup(jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, 524, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, 484, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 183, Short.MAX_VALUE)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(80, 80, 80))
         );
@@ -519,10 +515,6 @@ public class Mainmain extends javax.swing.JFrame {
     private void NewFileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_NewFileActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_NewFileActionPerformed
-
-    private void DeleteFileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_DeleteFileActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_DeleteFileActionPerformed
 
     /**
      * @param args the command line arguments
