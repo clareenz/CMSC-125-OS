@@ -36,7 +36,7 @@ public class welcome extends javax.swing.JFrame {
 
     this.setIconImage(img);
         // Create a JLabel to hold the GIF image
-        JLabel gifLabel = new JLabel(new ImageIcon(getClass().getResource("/SplashScreen/Startup ver 2.gif")));
+        JLabel gifLabel = new JLabel(new ImageIcon(getClass().getResource("/SplashScreen/Startup ver 4.gif")));
         
         // Get the screen size
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
@@ -59,7 +59,7 @@ public class welcome extends javax.swing.JFrame {
         setVisible(true);
     
     //---timer-----//
-    int welcomeDuration = 9500;
+    int welcomeDuration = 12000;
     welcomeTimer  = new Timer(welcomeDuration, new ActionListener() {
         @Override
         public void actionPerformed(ActionEvent e) {
