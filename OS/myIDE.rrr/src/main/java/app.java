@@ -339,8 +339,6 @@ closeButton.addMouseListener(new MouseAdapter() {
         openFile = new javax.swing.JButton();
         save = new javax.swing.JButton();
         saveAs = new javax.swing.JButton();
-        run = new javax.swing.JButton();
-        compile = new javax.swing.JButton();
         Note = new javax.swing.JButton();
         highlight = new javax.swing.JButton();
         unhighlight = new javax.swing.JButton();
@@ -359,7 +357,7 @@ closeButton.addMouseListener(new MouseAdapter() {
 
         undo.setBackground(new java.awt.Color(254, 191, 61));
         undo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/undooo.png"))); // NOI18N
-        compile.setEnabled(false);
+        //compile.setEnabled(false);
         undo.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 undoMouseEntered(evt);
@@ -373,7 +371,7 @@ closeButton.addMouseListener(new MouseAdapter() {
 
         redo.setBackground(new java.awt.Color(254, 191, 61));
         redo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/redooo.png"))); // NOI18N
-        compile.setEnabled(false);
+        //compile.setEnabled(false);
         redo.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 redoMouseEntered(evt);
@@ -442,37 +440,9 @@ closeButton.addMouseListener(new MouseAdapter() {
             }
         });
 
-        run.setBackground(new java.awt.Color(254, 191, 61));
-        run.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/run.png"))); // NOI18N
-        run.setEnabled(false);
-        run.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                runMouseEntered(evt);
-            }
-        });
-        run.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                runActionPerformed(evt);
-            }
-        });
-
-        compile.setBackground(new java.awt.Color(254, 191, 61));
-        compile.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/compile.png"))); // NOI18N
-        compile.setEnabled(false);
-        compile.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                compileMouseEntered(evt);
-            }
-        });
-        compile.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                compileActionPerformed(evt);
-            }
-        });
-
         Note.setBackground(new java.awt.Color(254, 191, 61));
         Note.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/noteee.png"))); // NOI18N
-        compile.setEnabled(false);
+        //compile.setEnabled(false);
         Note.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 NoteMouseEntered(evt);
@@ -486,7 +456,7 @@ closeButton.addMouseListener(new MouseAdapter() {
 
         highlight.setBackground(new java.awt.Color(254, 191, 61));
         highlight.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/highlight.png"))); // NOI18N
-        compile.setEnabled(false);
+        //compile.setEnabled(false);
         highlight.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 highlightMouseEntered(evt);
@@ -500,7 +470,7 @@ closeButton.addMouseListener(new MouseAdapter() {
 
         unhighlight.setBackground(new java.awt.Color(254, 191, 61));
         unhighlight.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/unhighlight.png"))); // NOI18N
-        compile.setEnabled(false);
+        //compile.setEnabled(false);
         unhighlight.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 unhighlightMouseEntered(evt);
@@ -525,10 +495,6 @@ closeButton.addMouseListener(new MouseAdapter() {
                 .addComponent(save, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(saveAs, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(run, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(compile, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(Note, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -547,8 +513,6 @@ closeButton.addMouseListener(new MouseAdapter() {
                     .addComponent(newFile, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(openFile, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(Note, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(compile, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(run, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(saveAs, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(save, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -615,12 +579,12 @@ closeButton.addMouseListener(new MouseAdapter() {
                     }
 
                     if (fileNames.get(selectedTabIndex) != null){
-                        run.setEnabled(true);
-                        compile.setEnabled(true);
+                        //                            run.setEnabled(true);
+                        //                            compile.setEnabled(true);
                     }
                     else{
-                        run.setEnabled(false);
-                        compile.setEnabled(false);
+                        //                        run.setEnabled(false);
+                        //                        compile.setEnabled(false);
                     }
                 }
             }
@@ -855,35 +819,6 @@ closeButton.addMouseListener(new MouseAdapter() {
         newFile.setToolTipText("New File");
     }//GEN-LAST:event_newFileMouseEntered
 
-    private void compileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_compileActionPerformed
-        // TODO add your handling code here:
-        saveFunction();
-        compile Compile = new compile();
-        Compile.setVisible(true);
-    }//GEN-LAST:event_compileActionPerformed
-
-    private void compileMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_compileMouseEntered
-        // TODO add your handling code here:
-        compile.setToolTipText("Compile");
-    }//GEN-LAST:event_compileMouseEntered
-
-    private void runActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_runActionPerformed
-        // TODO add your handling code here:
-        saveFunction();
-
-        compile Compile = new compile();
-        Compile.setVisible(true);
-
-        run Run = new run();
-        Run.setVisible(true);
-        //       JOptionPane.showMessageDialog(this, "File saved: " + Filename );
-    }//GEN-LAST:event_runActionPerformed
-
-    private void runMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_runMouseEntered
-        // TODO add your handling code here:
-        run.setToolTipText("Run");
-    }//GEN-LAST:event_runMouseEntered
-
     public void openFileFromOutside(File selectedFile){
         StringBuilder fileContents = new StringBuilder();
         try{
@@ -981,7 +916,6 @@ closeButton.addMouseListener(new MouseAdapter() {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton Note;
-    private javax.swing.JButton compile;
     private javax.swing.JButton highlight;
     private javax.swing.JDesktopPane jDesktopPane1;
     private javax.swing.JPanel jPanel1;
@@ -992,7 +926,6 @@ closeButton.addMouseListener(new MouseAdapter() {
     private javax.swing.JTextArea notes;
     private javax.swing.JButton openFile;
     private javax.swing.JButton redo;
-    private javax.swing.JButton run;
     private javax.swing.JButton save;
     private javax.swing.JButton saveAs;
     private javax.swing.JButton undo;
