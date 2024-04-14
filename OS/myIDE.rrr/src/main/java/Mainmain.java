@@ -50,9 +50,15 @@ import javax.swing.undo.CannotRedoException;
 import javax.swing.undo.CannotUndoException;
 import java.io.File;
 import java.io.IOException;
+import javax.sound.sampled.*;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
+import com.assemblyai.api.AssemblyAI;
+import com.assemblyai.api.resources.transcripts.types.Transcript;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
@@ -78,11 +84,26 @@ public class Mainmain extends javax.swing.JFrame {
     UndoManager undoManager = new UndoManager();
     DefaultHighlighter.DefaultHighlightPainter highlightPainter = new DefaultHighlighter.DefaultHighlightPainter(Color.YELLOW);
     JTextComponent selectedTextAreax;
+    app appPage = new app();
+
+    //For Voice Recognition
+    boolean keyHeldDown;
+    File audioFile = new File("audio.wav"); // Temporarily save audio to a file;
+    // Initialize AssemblyAI client
+    AssemblyAI client = AssemblyAI.builder()
+            .apiKey("927564b14b94443aa18ea5d9ee6eb6db")
+            .build();
+
+    // Set up microphone audio format
+    AudioFormat audioFormat = new AudioFormat(16000, 16, 1, true, false);
+    DataLine.Info targetInfo = new DataLine.Info(TargetDataLine.class, audioFormat);
+    TargetDataLine targetDataLine;
+
 
     public Mainmain() {
         initComponents();
-         // Set the JFrame to fullscreen
-       // setExtendedState(JFrame.MAXIMIZED_BOTH);
+        // Set the JFrame to fullscreen
+        // setExtendedState(JFrame.MAXIMIZED_BOTH);
 
         //------------------sisiw logo-----//
         Image img = new ImageIcon(this.getClass().getResource("/SplashScreen/Bee.png")).getImage();
@@ -92,9 +113,96 @@ public class Mainmain extends javax.swing.JFrame {
         fileNames.add(null);
         saved.add(true);
 
+        keyHeldDown = false;
+        try {
+            // Check if microphone is supported
+            if (!AudioSystem.isLineSupported(targetInfo)) {
+                System.out.println("Microphone not supported");
+                System.exit(1);
+            }
+
+            // Open microphone
+            targetDataLine = (TargetDataLine) AudioSystem.getLine(targetInfo);
+            targetDataLine.open(audioFormat);
+
+        } catch (LineUnavailableException e) {
+            System.out.println("Microphone not available: " + e.getMessage());
+        }
+
+        // Add this code inside your constructor or initialization method
+        InputMap inputMap = jDesktopPane1.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
+        ActionMap actionMap = jDesktopPane1.getActionMap();
+
+        inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_SPACE, 0, false), "startRecording");
+        actionMap.put("startRecording", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (!keyHeldDown) {
+                    keyHeldDown = true;
+                    System.out.println("Push-to-talk activated. Start speaking...");
+
+                    // Reopen the TargetDataLine
+                    try {
+                        targetDataLine.open(audioFormat);
+                        targetDataLine.start();
+                    } catch (LineUnavailableException ex) {
+                        System.out.println("Error opening the TargetDataLine: " + ex.getMessage());
+                    }
+
+                    // Create a new thread for recording audio
+                    Thread audioRecord = new Thread() {
+                        @Override
+                        public void run() {
+                            try {
+                                AudioSystem.write(new AudioInputStream(targetDataLine), AudioFileFormat.Type.WAVE, audioFile);
+                            } catch (IOException ex) {
+                                Logger.getLogger(Mainmain.class.getName()).log(Level.SEVERE, null, ex);
+                            }
+                        }
+                    };
+                    audioRecord.start(); // Start the recording thread
+                }
+            }
+        });
+
+        inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_SPACE, 0, true), "stopRecording");
+        actionMap.put("stopRecording", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Stop capturing audio when key is released
+                keyHeldDown = false;
+                System.out.println("Push-to-talk deactivated.");
+                targetDataLine.stop();
+                targetDataLine.close();
+                try {
+                    Transcript transcript = client.transcripts().transcribe(audioFile);
+                    System.out.println("Transcript: " + transcript.getText());
+                    String regex = "Optional\\[(.*)\\]";
+                    Pattern pattern = Pattern.compile(regex);
+                    Matcher matcher = pattern.matcher(transcript.getText().toString());
+
+                    if (matcher.find()) {
+                        String extractedString = matcher.group(1);
+                        System.out.println(extractedString);
+                        Commands(extractedString);
+                    }
+                   
+                } catch (IOException ex) {
+                    System.out.println("Error during transcription: ");
+                }
+            }
+        });
 
     }
 
+    public void Commands(String a) {
+        if (a.equals("Open notepad, please.")) {
+            appPage.setVisible(true);
+        }
+        if (a.equals("Close notepad, please.")) {
+            appPage.setVisible(false);
+        }
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -476,7 +584,6 @@ public class Mainmain extends javax.swing.JFrame {
 
     private void NotepadButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_NotepadButtonActionPerformed
         // TODO add your handling code here:
-        app appPage = new app();
         appPage.setVisible(true);
     }//GEN-LAST:event_NotepadButtonActionPerformed
 
@@ -575,8 +682,8 @@ public class Mainmain extends javax.swing.JFrame {
             new FileManager().setVisible(true); // Create and show a new instance of FileManager
         });
     }
-    
-    private void openFile(){
+
+    private void openFile() {
         String userHome = System.getProperty("user.home");
         int selectedIndex = fileList.getSelectedIndex();
         if (selectedIndex != -1) {
@@ -588,9 +695,9 @@ public class Mainmain extends javax.swing.JFrame {
         } else {
             JOptionPane.showMessageDialog(this, "Please select a file to open!", "Error", JOptionPane.ERROR_MESSAGE);
         }
-        
+
     }
-    
+
     private void createNewFile() {
         String userHome = System.getProperty("user.home");
         String fileName = JOptionPane.showInputDialog(this, "Enter the name of the new file:");
@@ -608,44 +715,45 @@ public class Mainmain extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(this, "Error creating file: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
             }
         }
-                
+
         fileList = new JList<>(getFilesInDirectory(userHome + File.separator + "Desktop\\HoneyOS_Documents"));
     }
- private String[] getFilesInDirectory(String directoryPath) {
-    File directory = new File(directoryPath);
-    if (!directory.exists()) {
-        System.out.println("Directory does not exist. Creating directory...");
-        boolean created = directory.mkdirs(); // Attempt to create the directory
-        if (!created) {
-            System.err.println("Failed to create directory: " + directoryPath);
-            return new String[0];
-        }
-    }
 
-    File[] files = directory.listFiles();
-    if (files != null && files.length > 0) {
-        
-        System.out.println("Files in directory:");
-        for (File file : files) {
-            if (file.isFile()) { // Check if it's a regular file
-                System.out.println(file.getName());
+    private String[] getFilesInDirectory(String directoryPath) {
+        File directory = new File(directoryPath);
+        if (!directory.exists()) {
+            System.out.println("Directory does not exist. Creating directory...");
+            boolean created = directory.mkdirs(); // Attempt to create the directory
+            if (!created) {
+                System.err.println("Failed to create directory: " + directoryPath);
+                return new String[0];
             }
         }
-        
-        String[] fileNames = new String[files.length];
-        for (int i = 0; i < files.length; i++) {
-            fileNames[i] = files[i].getName();
+
+        File[] files = directory.listFiles();
+        if (files != null && files.length > 0) {
+
+            System.out.println("Files in directory:");
+            for (File file : files) {
+                if (file.isFile()) { // Check if it's a regular file
+                    System.out.println(file.getName());
+                }
+            }
+
+            String[] fileNames = new String[files.length];
+            for (int i = 0; i < files.length; i++) {
+                fileNames[i] = files[i].getName();
+            }
+            return fileNames;
+        } else {
+            System.out.println("No files found in directory: " + directoryPath);
+            return new String[0];
         }
-        return fileNames;
-    } else {
-        System.out.println("No files found in directory: " + directoryPath);
-        return new String[0];
+
     }
 
-}
-
- private void deleteSelectedFile() {
-     String userHome = System.getProperty("user.home");
+    private void deleteSelectedFile() {
+        String userHome = System.getProperty("user.home");
         int selectedIndex = fileList.getSelectedIndex();
         if (selectedIndex != -1) {
             String selectedFileName = fileList.getSelectedValue();
@@ -662,8 +770,8 @@ public class Mainmain extends javax.swing.JFrame {
         } else {
             JOptionPane.showMessageDialog(this, "Please select a file to delete!", "Error", JOptionPane.ERROR_MESSAGE);
         }
- }
- 
+    }
+
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
