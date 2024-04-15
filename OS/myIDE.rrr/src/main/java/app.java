@@ -1,4 +1,6 @@
 
+import com.assemblyai.api.AssemblyAI;
+import com.assemblyai.api.resources.transcripts.types.Transcript;
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Container;
@@ -44,6 +46,15 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import javax.sound.sampled.AudioFileFormat;
+import javax.sound.sampled.AudioFormat;
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.DataLine;
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.TargetDataLine;
 import javax.swing.undo.CannotRedoException;
 import javax.swing.undo.CannotUndoException;
 
@@ -51,7 +62,6 @@ import javax.swing.undo.CannotUndoException;
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
-
 /**
  *
  * @author lylem
@@ -73,129 +83,242 @@ public class app extends javax.swing.JFrame {
     UndoManager undoManager = new UndoManager();
     DefaultHighlighter.DefaultHighlightPainter highlightPainter = new DefaultHighlighter.DefaultHighlightPainter(Color.YELLOW);
     JTextComponent selectedTextAreax;
+
+    boolean keyHeldDown;
+    File audioFile = new File("audio.wav"); // Temporarily save audio to a file;
+    // Initialize AssemblyAI client
+    AssemblyAI client = AssemblyAI.builder()
+            .apiKey("927564b14b94443aa18ea5d9ee6eb6db")
+            .build();
+
+    // Set up microphone audio format
+    AudioFormat audioFormat = new AudioFormat(16000, 16, 1, true, false);
+    DataLine.Info targetInfo = new DataLine.Info(TargetDataLine.class, audioFormat);
+    TargetDataLine targetDataLine;
+
     public app() {
         initComponents();
 
-         //------------------sisiw logo-----//
+        //------------------sisiw logo-----//
         Image img = new ImageIcon(this.getClass().getResource("/SplashScreen/Bee.png")).getImage();
         this.setIconImage(img);
         setTitle("Honey OS");
-        
-        
+
         fileNames.add(null);
         saved.add(true);
         addNewFile();
 
+        //Voice
+        keyHeldDown = false;
+
+        // Add this code inside your constructor or initialization method
+        InputMap inputMap = jDesktopPane1.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
+        ActionMap actionMap = jDesktopPane1.getActionMap();
+
+        inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_SPACE, 0, false), "startRecording");
+        actionMap.put("startRecording", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (!keyHeldDown) {
+                    keyHeldDown = true;
+                    try {
+                        // Check if microphone is supported
+                        if (!AudioSystem.isLineSupported(targetInfo)) {
+                            System.out.println("Microphone not supported");
+                            System.exit(1);
+                        }
+
+                        // Open microphone
+                        targetDataLine = (TargetDataLine) AudioSystem.getLine(targetInfo);
+                        targetDataLine.open(audioFormat);
+
+                    } catch (LineUnavailableException x) {
+                        System.out.println("Microphone not available: " + x.getMessage());
+                    }
+
+                    System.out.println("Push-to-talk activated. Start speaking...");
+
+                    // Reopen the TargetDataLine
+                    try {
+                        targetDataLine.open(audioFormat);
+                        targetDataLine.start();
+                    } catch (LineUnavailableException ex) {
+                        System.out.println("Error opening the TargetDataLine: " + ex.getMessage());
+                    }
+
+                    // Create a new thread for recording audio
+                    Thread audioRecord = new Thread() {
+                        @Override
+                        public void run() {
+                            try {
+                                AudioSystem.write(new AudioInputStream(targetDataLine), AudioFileFormat.Type.WAVE, audioFile);
+                            } catch (IOException ex) {
+                                Logger.getLogger(Mainmain.class.getName()).log(Level.SEVERE, null, ex);
+                            }
+                        }
+                    };
+                    audioRecord.start(); // Start the recording thread
+                }
+            }
+        });
+
+        inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_SPACE, 0, true), "stopRecording");
+        actionMap.put("stopRecording", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Stop capturing audio when key is released
+                keyHeldDown = false;
+                System.out.println("Push-to-talk deactivated.");
+                targetDataLine.stop();
+                targetDataLine.close();
+                try {
+                    Transcript transcript = client.transcripts().transcribe(audioFile);
+                    System.out.println("Transcript: " + transcript.getText());
+                    String regex = "Optional\\[(.*)\\]";
+                    Pattern pattern = Pattern.compile(regex);
+                    Matcher matcher = pattern.matcher(transcript.getText().toString());
+
+                    if (matcher.find()) {
+                        String extractedString = matcher.group(1).toLowerCase(); // Convert to lowercase
+                        extractedString = extractedString.replace(",", ""); // Remove commas
+                        extractedString = extractedString.replace(".", ""); // Remove periods
+                        System.out.println(extractedString);
+                        Commands(extractedString);
+                    }
+
+                } catch (IOException ex) {
+                    System.out.println("Error during transcription: ");
+                }
+            }
+        });
+        //Voice
+
     }
 
-        private void addNewFile(){
+    public void Commands(String a) {
+        if (a.equals("open file please")) {
+            openFile();
+        }
+        if (a.equals("add new file please")) {
+            fileNames.add(null);
+            saved.add(true);
+            addNewFile();
+        }
+        if (a.equals("save file please")) {
+            saveFunction();
+        }
+        if (a.equals("save new file please")) {
+            saveAsFunction();
+            saveAs.setEnabled(false);
+        }
+        if (a.equals("close notepad please")) {
+            this.setVisible(false);
+        }
+    }
+
+    private void addNewFile() {
         addedSomething = true;
         JPanel newTab = new JPanel(new BorderLayout());
         JTextArea textArea = new JTextArea();
         textArea.setWrapStyleWord(true);
         textArea.setLineWrap(true);
-        textArea.getDocument().addDocumentListener(new DocumentListener(){
-        @Override
-        public void insertUpdate(DocumentEvent e){
-            updateLabel();
-        }
-
-        @Override
-        public void removeUpdate(DocumentEvent e){
-            updateLabel();
-        }
-
-        @Override
-        public void changedUpdate(DocumentEvent e){
-            updateLabel();
-        }
-
-        private void updateLabel(){
-            saved.set(jTabbedPane1.getSelectedIndex(), false);
-            saveAs.setEnabled(true);
-            if(fileNames.get(jTabbedPane1.getSelectedIndex()) != null){
-                save.setEnabled(true);
+        textArea.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                updateLabel();
             }
-        }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                updateLabel();
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                updateLabel();
+            }
+
+            private void updateLabel() {
+                saved.set(jTabbedPane1.getSelectedIndex(), false);
+                saveAs.setEnabled(true);
+                if (fileNames.get(jTabbedPane1.getSelectedIndex()) != null) {
+                    save.setEnabled(true);
+                }
+            }
         });
-        
+
         textArea.getDocument().addUndoableEditListener(undoManager);
-        
+
         JScrollPane scrollPane = new JScrollPane(textArea);
         newTab.add(scrollPane, BorderLayout.CENTER);
 
         int tabCount = jTabbedPane1.getTabCount() + 1;
         jTabbedPane1.addTab("Tab " + tabCount, newTab);
         jTabbedPane1.setSelectedIndex(tabCount - 1);
-        jTabbedPane1.setTabComponentAt(jTabbedPane1.indexOfComponent(newTab),getTitlePanel(jTabbedPane1, newTab, "new Tab"));
+        jTabbedPane1.setTabComponentAt(jTabbedPane1.indexOfComponent(newTab), getTitlePanel(jTabbedPane1, newTab, "new Tab"));
     }
 
-        
-private void saveAsFunction(){
+    private void saveAsFunction() {
         int selectedTabIndex = jTabbedPane1.getSelectedIndex();
         saved.set(selectedTabIndex, true);
-            String text = "";
-                JFileChooser fileChooser = new JFileChooser();
-                int returnValue = fileChooser.showSaveDialog(this);
-                   String extension = ".txt";
-                if (returnValue == JFileChooser.APPROVE_OPTION) {
-                    File selectedFile = fileChooser.getSelectedFile();
-                    Filename = selectedFile.getAbsolutePath() + extension;
-                    fname = selectedFile.getName();
-                    try{
-                        BufferedWriter bw = new BufferedWriter(new FileWriter(Filename));
-                        if (selectedTabIndex != -1) {
-                        Component selectedTab = jTabbedPane1.getComponentAt(selectedTabIndex);
-                        JTextComponent selectedTextArea = findTextAreaInScrollPane(selectedTab);
-                        if (selectedTextArea != null) {
+        String text = "";
+        JFileChooser fileChooser = new JFileChooser();
+        int returnValue = fileChooser.showSaveDialog(this);
+        String extension = ".txt";
+        if (returnValue == JFileChooser.APPROVE_OPTION) {
+            File selectedFile = fileChooser.getSelectedFile();
+            Filename = selectedFile.getAbsolutePath() + extension;
+            fname = selectedFile.getName();
+            try {
+                BufferedWriter bw = new BufferedWriter(new FileWriter(Filename));
+                if (selectedTabIndex != -1) {
+                    Component selectedTab = jTabbedPane1.getComponentAt(selectedTabIndex);
+                    JTextComponent selectedTextArea = findTextAreaInScrollPane(selectedTab);
+                    if (selectedTextArea != null) {
                         text = selectedTextArea.getText();
-                        jTabbedPane1.setTabComponentAt(selectedTabIndex,getTitlePanel(jTabbedPane1,(JPanel)jTabbedPane1.getComponentAt(selectedTabIndex), fname+".txt"));
+                        jTabbedPane1.setTabComponentAt(selectedTabIndex, getTitlePanel(jTabbedPane1, (JPanel) jTabbedPane1.getComponentAt(selectedTabIndex), fname + ".txt"));
                         jTabbedPane1.getSelectedIndex();
-                        }
-                        }
-                        bw.write(text);
-                        bw.close();
-                        fileNames.set(selectedTabIndex, Filename);
-                        }
-                    catch(Exception ex){
-                        ex.printStackTrace();
-                        }
-                    JOptionPane.showMessageDialog(this, "File saved: " + Filename );
-                    isSaved = true;
+                    }
                 }
-        
+                bw.write(text);
+                bw.close();
+                fileNames.set(selectedTabIndex, Filename);
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+            JOptionPane.showMessageDialog(this, "File saved: " + Filename);
+            isSaved = true;
+        }
+
         save.setEnabled(false);
         saveAs.setEnabled(false);
     }
 
-        private void saveFunction(){
+    private void saveFunction() {
         int selectedTabIndex = jTabbedPane1.getSelectedIndex();
         saved.set(selectedTabIndex, true);
-        try{
+        try {
             BufferedWriter bw = new BufferedWriter(new FileWriter(fileNames.get(selectedTabIndex)));
             if (selectedTabIndex != -1) {
-            Component selectedTab = jTabbedPane1.getComponentAt(selectedTabIndex);
-            JTextComponent selectedTextArea = findTextAreaInScrollPane(selectedTab);
-            if (selectedTextArea != null) {
-            text = selectedTextArea.getText();
-            }
+                Component selectedTab = jTabbedPane1.getComponentAt(selectedTabIndex);
+                JTextComponent selectedTextArea = findTextAreaInScrollPane(selectedTab);
+                if (selectedTextArea != null) {
+                    text = selectedTextArea.getText();
+                }
             }
             bw.write(text);
             bw.close();
-            
+
             JOptionPane.showMessageDialog(this, "File saved: " + fileNames.get(selectedTabIndex));
 //            isSaved = true;
-        }
-        catch(Exception ex){
+        } catch (Exception ex) {
             ex.printStackTrace();
         }
         save.setEnabled(false);
         saveAs.setEnabled(false);
     }
 
-
-    private JPanel getTitlePanel(final JTabbedPane tabbedPane, final JPanel panel, String title)
-    {
+    private JPanel getTitlePanel(final JTabbedPane tabbedPane, final JPanel panel, String title) {
         JPanel titlePanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
         titlePanel.setOpaque(false);
         JLabel titleLbl = new JLabel(title);
@@ -209,17 +332,17 @@ private void saveAsFunction(){
         closeButton.setFocusPainted(false);
         closeButton.setContentAreaFilled(false);
 
-closeButton.addMouseListener(new MouseAdapter() {
-    @Override
-    public void mouseEntered(MouseEvent e) {
-        closeButton.setBackground(Color.RED); // Change the background color on hover
-    }
+        closeButton.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                closeButton.setBackground(Color.RED); // Change the background color on hover
+            }
 
-    @Override
-    public void mouseExited(MouseEvent e) {
-        closeButton.setBackground(null); // Reset the background color when the mouse exits
-    }
-});
+            @Override
+            public void mouseExited(MouseEvent e) {
+                closeButton.setBackground(null); // Reset the background color when the mouse exits
+            }
+        });
 
 //// Add an ActionListener to handle button click events
 //closeButton.addActionListener(new ActionListener() {
@@ -228,86 +351,75 @@ closeButton.addMouseListener(new MouseAdapter() {
 //        // Handle button click action here (e.g., closing the tab)
 //    }
 //});
-
-        closeButton.addMouseListener(new MouseAdapter()
-    {
-                @Override
-        public void mouseClicked(MouseEvent e)
-        {
+        closeButton.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
 //            if (fileNames.size() > 1){
 //            }
-            if(fileNames.size() == 1){
+                if (fileNames.size() == 1) {
                     int responseClose = JOptionPane.showConfirmDialog(null, "Deleting the tab would close the application, Continue?", "Confirmation", JOptionPane.YES_NO_CANCEL_OPTION);
-                    if (responseClose == JOptionPane.YES_OPTION){
-                        if (saved.get(jTabbedPane1.getSelectedIndex()) == false){
+                    if (responseClose == JOptionPane.YES_OPTION) {
+                        if (saved.get(jTabbedPane1.getSelectedIndex()) == false) {
                             int response = JOptionPane.showConfirmDialog(null, "Do you want to save your changes first?", "Confirmation", JOptionPane.YES_NO_CANCEL_OPTION);
 
-                            if (response == JOptionPane.YES_OPTION){
-                                if(fileNames.get(jTabbedPane1.getSelectedIndex()) != null){
-                                saveFunction();
-                                }
-                                else {
+                            if (response == JOptionPane.YES_OPTION) {
+                                if (fileNames.get(jTabbedPane1.getSelectedIndex()) != null) {
+                                    saveFunction();
+                                } else {
                                     saveAsFunction();
                                 }
-                            
-                        }
-                        else if (response == JOptionPane.NO_OPTION){
+
+                            } else if (response == JOptionPane.NO_OPTION) {
+                                tabbedPane.remove(panel);
+                                fileNames.remove(jTabbedPane1.getSelectedIndex() + 1);
+                                saved.remove(jTabbedPane1.getSelectedIndex() + 1);
+                            }
+                        } else {
                             tabbedPane.remove(panel);
-                            fileNames.remove(jTabbedPane1.getSelectedIndex()+1);
-                            saved.remove(jTabbedPane1.getSelectedIndex()+1);
+                            fileNames.remove(jTabbedPane1.getSelectedIndex() + 1);
+                            saved.remove(jTabbedPane1.getSelectedIndex() + 1);
                         }
-                        }
-                        else{
-                        tabbedPane.remove(panel);
-                        fileNames.remove(jTabbedPane1.getSelectedIndex()+1);
-                        saved.remove(jTabbedPane1.getSelectedIndex()+1);
-                        }
-                                System.exit(0);
-                        }
-                }
-                else{
+                        System.exit(0);
+                    }
+                } else {
 //                    int responseClose = JOptionPane.showConfirmDialog(null, "Deleting the tab would close the application, Continue?", "Confirmation", JOptionPane.YES_NO_CANCEL_OPTION);
 //                    if (responseClose == JOptionPane.YES_OPTION){
-                        if (saved.get(jTabbedPane1.getSelectedIndex()) == false){
-                            int response = JOptionPane.showConfirmDialog(null, "Do you want to save your changes first?", "Confirmation", JOptionPane.YES_NO_CANCEL_OPTION);
+                    if (saved.get(jTabbedPane1.getSelectedIndex()) == false) {
+                        int response = JOptionPane.showConfirmDialog(null, "Do you want to save your changes first?", "Confirmation", JOptionPane.YES_NO_CANCEL_OPTION);
 
-                            if (response == JOptionPane.YES_OPTION){
-                                if(fileNames.get(jTabbedPane1.getSelectedIndex()) != null){
+                        if (response == JOptionPane.YES_OPTION) {
+                            if (fileNames.get(jTabbedPane1.getSelectedIndex()) != null) {
                                 saveFunction();
                                 tabbedPane.remove(panel);
-                                fileNames.remove(jTabbedPane1.getSelectedIndex()+1);
-                                saved.remove(jTabbedPane1.getSelectedIndex()+1);
-                            }   
-                            else {
-                            saveAsFunction();
-                            tabbedPane.remove(panel);
-                            fileNames.remove(jTabbedPane1.getSelectedIndex()+1);
-                            saved.remove(jTabbedPane1.getSelectedIndex()+1);
+                                fileNames.remove(jTabbedPane1.getSelectedIndex() + 1);
+                                saved.remove(jTabbedPane1.getSelectedIndex() + 1);
+                            } else {
+                                saveAsFunction();
+                                tabbedPane.remove(panel);
+                                fileNames.remove(jTabbedPane1.getSelectedIndex() + 1);
+                                saved.remove(jTabbedPane1.getSelectedIndex() + 1);
                             }
-                        }
-                        else if (response == JOptionPane.NO_OPTION){
+                        } else if (response == JOptionPane.NO_OPTION) {
                             tabbedPane.remove(panel);
-                            fileNames.remove(jTabbedPane1.getSelectedIndex()+1);
-                            saved.remove(jTabbedPane1.getSelectedIndex()+1);
+                            fileNames.remove(jTabbedPane1.getSelectedIndex() + 1);
+                            saved.remove(jTabbedPane1.getSelectedIndex() + 1);
                         }
-                        }
-                        else{
+                    } else {
                         tabbedPane.remove(panel);
-                        fileNames.remove(jTabbedPane1.getSelectedIndex()+1);
-                        saved.remove(jTabbedPane1.getSelectedIndex()+1);
-                        }
+                        fileNames.remove(jTabbedPane1.getSelectedIndex() + 1);
+                        saved.remove(jTabbedPane1.getSelectedIndex() + 1);
+                    }
 //                                System.exit(0);
 //                        }
+                }
+
             }
-            
-        }
         });
         titlePanel.add(closeButton);
 
         return titlePanel;
     }
 
-    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -616,8 +728,7 @@ closeButton.addMouseListener(new MouseAdapter() {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
- 
-     private static JTextArea findTextAreaInScrollPane(Component component) {
+    private static JTextArea findTextAreaInScrollPane(Component component) {
         if (component instanceof Container) {
             Component[] components = ((Container) component).getComponents();
             for (Component comp : components) {
@@ -633,8 +744,8 @@ closeButton.addMouseListener(new MouseAdapter() {
         }
         return null;
     }
-     
-    
+
+
     private void undoMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_undoMouseEntered
         // TODO add your handling code here:
         undo.setToolTipText("undo");
@@ -642,11 +753,10 @@ closeButton.addMouseListener(new MouseAdapter() {
 
     private void undoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_undoActionPerformed
         // TODO add your handling code here:
-        if(undoManager.canUndo()){
-            try{
+        if (undoManager.canUndo()) {
+            try {
                 undoManager.undo();
-            }
-            catch(CannotUndoException ex){
+            } catch (CannotUndoException ex) {
                 ex.printStackTrace();
             }
         }
@@ -659,11 +769,10 @@ closeButton.addMouseListener(new MouseAdapter() {
 
     private void redoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_redoActionPerformed
         // TODO add your handling code here:
-        if(undoManager.canRedo()){
-            try{
+        if (undoManager.canRedo()) {
+            try {
                 undoManager.redo();
-            }
-            catch(CannotRedoException ex){
+            } catch (CannotRedoException ex) {
                 ex.printStackTrace();
             }
         }
@@ -681,18 +790,18 @@ closeButton.addMouseListener(new MouseAdapter() {
 
     private void highlightActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_highlightActionPerformed
         // TODO add your handling code here:
-        try{
+        try {
             int selectedTabIndex = jTabbedPane1.getSelectedIndex();
             Component selectedTab = jTabbedPane1.getComponentAt(selectedTabIndex);
             selectedTextAreax = findTextAreaInScrollPane(selectedTab);
             String selectedText = selectedTextAreax.getSelectedText();
 
-            if(selectedText != null){
+            if (selectedText != null) {
                 int start = selectedTextAreax.getSelectionStart();
                 int end = selectedTextAreax.getSelectionEnd();
                 selectedTextAreax.getHighlighter().addHighlight(start, end, highlightPainter);
             }
-        }catch (Exception ex){
+        } catch (Exception ex) {
             System.out.println(ex);
         }
 
@@ -742,6 +851,28 @@ closeButton.addMouseListener(new MouseAdapter() {
 
     private void openFileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_openFileActionPerformed
         // TODO add your handling code here:
+        openFile();
+
+    }//GEN-LAST:event_openFileActionPerformed
+
+    private void openFileMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_openFileMouseEntered
+        // TODO add your handling code here:
+        openFile.setToolTipText("Open File");
+    }//GEN-LAST:event_openFileMouseEntered
+
+    private void newFileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_newFileActionPerformed
+        // TODO add your handling code here:
+        fileNames.add(null);
+        saved.add(true);
+        addNewFile();
+    }//GEN-LAST:event_newFileActionPerformed
+
+    private void newFileMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_newFileMouseEntered
+        // TODO add your handling code here:
+        newFile.setToolTipText("New File");
+    }//GEN-LAST:event_newFileMouseEntered
+
+    public void openFile(){
         JFileChooser fileChooser = new JFileChooser();
         fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
         int result = fileChooser.showOpenDialog(this);
@@ -762,23 +893,23 @@ closeButton.addMouseListener(new MouseAdapter() {
                 JScrollPane scrollPane = new JScrollPane(textArea);
                 newTab.add(scrollPane, BorderLayout.CENTER);
                 textArea.setText(fileContents.toString());
-                textArea.getDocument().addDocumentListener(new DocumentListener(){
+                textArea.getDocument().addDocumentListener(new DocumentListener() {
                     @Override
-                    public void insertUpdate(DocumentEvent e){
+                    public void insertUpdate(DocumentEvent e) {
                         updateLabel();
                     }
 
                     @Override
-                    public void removeUpdate(DocumentEvent e){
+                    public void removeUpdate(DocumentEvent e) {
                         updateLabel();
                     }
 
                     @Override
-                    public void changedUpdate(DocumentEvent e){
+                    public void changedUpdate(DocumentEvent e) {
                         updateLabel();
                     }
 
-                    private void updateLabel(){
+                    private void updateLabel() {
                         saved.set(jTabbedPane1.getSelectedIndex(), false);
                         saveAs.setEnabled(true);
                         save.setEnabled(true);
@@ -791,7 +922,7 @@ closeButton.addMouseListener(new MouseAdapter() {
                 int tabCount = jTabbedPane1.getTabCount() + 1;
                 jTabbedPane1.addTab("Tab " + tabCount, newTab);
                 jTabbedPane1.setSelectedIndex(tabCount - 1);
-                jTabbedPane1.setTabComponentAt(jTabbedPane1.indexOfComponent(newTab),getTitlePanel(jTabbedPane1, newTab, fname));
+                jTabbedPane1.setTabComponentAt(jTabbedPane1.indexOfComponent(newTab), getTitlePanel(jTabbedPane1, newTab, fname));
                 setTitle(Filename);
                 save.setEnabled(false);
                 saveAs.setEnabled(false);
@@ -800,82 +931,65 @@ closeButton.addMouseListener(new MouseAdapter() {
                 JOptionPane.showMessageDialog(this, "Error reading the file.", "Error", JOptionPane.ERROR_MESSAGE);
             }
         }
-    }//GEN-LAST:event_openFileActionPerformed
-
-    private void openFileMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_openFileMouseEntered
-        // TODO add your handling code here:
-        openFile.setToolTipText("Open File");
-    }//GEN-LAST:event_openFileMouseEntered
-
-    private void newFileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_newFileActionPerformed
-        // TODO add your handling code here:
-        fileNames.add(null);
-        saved.add(true);
-        addNewFile();
-    }//GEN-LAST:event_newFileActionPerformed
-
-    private void newFileMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_newFileMouseEntered
-        // TODO add your handling code here:
-        newFile.setToolTipText("New File");
-    }//GEN-LAST:event_newFileMouseEntered
-
-    public void openFileFromOutside(File selectedFile){
+    }
+    public void openFileFromOutside(File selectedFile) {
         StringBuilder fileContents = new StringBuilder();
-        try{
-        
-                BufferedReader reader = new BufferedReader(new FileReader(selectedFile));
-                String line;
-                while ((line = reader.readLine()) != null) {
-                    fileContents.append(line).append("\n");
+        try {
+
+            BufferedReader reader = new BufferedReader(new FileReader(selectedFile));
+            String line;
+            while ((line = reader.readLine()) != null) {
+                fileContents.append(line).append("\n");
+            }
+            reader.close();
+            JPanel newTab = new JPanel(new BorderLayout());
+            JTextArea textArea = new JTextArea();
+            textArea.setWrapStyleWord(true);
+            textArea.setLineWrap(true);
+            JScrollPane scrollPane = new JScrollPane(textArea);
+            newTab.add(scrollPane, BorderLayout.CENTER);
+            textArea.setText(fileContents.toString());
+            textArea.getDocument().addDocumentListener(new DocumentListener() {
+                @Override
+                public void insertUpdate(DocumentEvent e) {
+                    updateLabel();
                 }
-                reader.close();
-                JPanel newTab = new JPanel(new BorderLayout());
-                JTextArea textArea = new JTextArea();
-                textArea.setWrapStyleWord(true);
-                textArea.setLineWrap(true);
-                JScrollPane scrollPane = new JScrollPane(textArea);
-                newTab.add(scrollPane, BorderLayout.CENTER);
-                textArea.setText(fileContents.toString());
-                textArea.getDocument().addDocumentListener(new DocumentListener(){
-                    @Override
-                    public void insertUpdate(DocumentEvent e){
-                        updateLabel();
-                    }
 
-                    @Override
-                    public void removeUpdate(DocumentEvent e){
-                        updateLabel();
-                    }
+                @Override
+                public void removeUpdate(DocumentEvent e) {
+                    updateLabel();
+                }
 
-                    @Override
-                    public void changedUpdate(DocumentEvent e){
-                        updateLabel();
-                    }
+                @Override
+                public void changedUpdate(DocumentEvent e) {
+                    updateLabel();
+                }
 
-                    private void updateLabel(){
-                        saved.set(jTabbedPane1.getSelectedIndex(), false);
-                        saveAs.setEnabled(true);
-                        save.setEnabled(true);
-                    }
-                });
-                Filename = selectedFile.getAbsolutePath();
-                fname = selectedFile.getName();
-                fileNames.add(Filename);
-                saved.add(true);
-                int tabCount = jTabbedPane1.getTabCount() + 1;
-                jTabbedPane1.addTab("Tab " + tabCount, newTab);
-                jTabbedPane1.setSelectedIndex(tabCount - 1);
-                jTabbedPane1.setTabComponentAt(jTabbedPane1.indexOfComponent(newTab),getTitlePanel(jTabbedPane1, newTab, fname));
-                setTitle(Filename);
-                save.setEnabled(false);
-                saveAs.setEnabled(false);
-    
-        }catch (IOException e){
+                private void updateLabel() {
+                    saved.set(jTabbedPane1.getSelectedIndex(), false);
+                    saveAs.setEnabled(true);
+                    save.setEnabled(true);
+                }
+            });
+            Filename = selectedFile.getAbsolutePath();
+            fname = selectedFile.getName();
+            fileNames.add(Filename);
+            saved.add(true);
+            int tabCount = jTabbedPane1.getTabCount() + 1;
+            jTabbedPane1.addTab("Tab " + tabCount, newTab);
+            jTabbedPane1.setSelectedIndex(tabCount - 1);
+            jTabbedPane1.setTabComponentAt(jTabbedPane1.indexOfComponent(newTab), getTitlePanel(jTabbedPane1, newTab, fname));
+            setTitle(Filename);
+            save.setEnabled(false);
+            saveAs.setEnabled(false);
+
+        } catch (IOException e) {
             e.printStackTrace();
             JOptionPane.showMessageDialog(this, "Error reading the file.", "Error", JOptionPane.ERROR_MESSAGE);
 
         }
     }
+
     /**
      * @param args the command line arguments
      */
@@ -909,9 +1023,7 @@ closeButton.addMouseListener(new MouseAdapter() {
                 new Mainmain().setVisible(true);
             }
         });
-        
 
-        
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

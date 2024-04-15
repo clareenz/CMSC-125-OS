@@ -99,7 +99,6 @@ public class Mainmain extends javax.swing.JFrame {
     DataLine.Info targetInfo = new DataLine.Info(TargetDataLine.class, audioFormat);
     TargetDataLine targetDataLine;
 
-
     public Mainmain() {
         initComponents();
         // Set the JFrame to fullscreen
@@ -113,21 +112,8 @@ public class Mainmain extends javax.swing.JFrame {
         fileNames.add(null);
         saved.add(true);
 
+        //Voice
         keyHeldDown = false;
-        try {
-            // Check if microphone is supported
-            if (!AudioSystem.isLineSupported(targetInfo)) {
-                System.out.println("Microphone not supported");
-                System.exit(1);
-            }
-
-            // Open microphone
-            targetDataLine = (TargetDataLine) AudioSystem.getLine(targetInfo);
-            targetDataLine.open(audioFormat);
-
-        } catch (LineUnavailableException e) {
-            System.out.println("Microphone not available: " + e.getMessage());
-        }
 
         // Add this code inside your constructor or initialization method
         InputMap inputMap = jDesktopPane1.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
@@ -139,6 +125,20 @@ public class Mainmain extends javax.swing.JFrame {
             public void actionPerformed(ActionEvent e) {
                 if (!keyHeldDown) {
                     keyHeldDown = true;
+                    try {
+                        // Check if microphone is supported
+                        if (!AudioSystem.isLineSupported(targetInfo)) {
+                            System.out.println("Microphone not supported");
+                            System.exit(1);
+                        }
+
+                        // Open microphone
+                        targetDataLine = (TargetDataLine) AudioSystem.getLine(targetInfo);
+                        targetDataLine.open(audioFormat);
+
+                    } catch (LineUnavailableException x) {
+                        System.out.println("Microphone not available: " + x.getMessage());
+                    }
                     System.out.println("Push-to-talk activated. Start speaking...");
 
                     // Reopen the TargetDataLine
@@ -182,24 +182,27 @@ public class Mainmain extends javax.swing.JFrame {
                     Matcher matcher = pattern.matcher(transcript.getText().toString());
 
                     if (matcher.find()) {
-                        String extractedString = matcher.group(1);
+                        String extractedString = matcher.group(1).toLowerCase(); // Convert to lowercase
+                        extractedString = extractedString.replace(",", ""); // Remove commas
+                        extractedString = extractedString.replace(".", ""); // Remove periods
                         System.out.println(extractedString);
                         Commands(extractedString);
                     }
-                   
+
                 } catch (IOException ex) {
                     System.out.println("Error during transcription: ");
                 }
             }
         });
+        //Voice
 
     }
 
     public void Commands(String a) {
-        if (a.equals("Open notepad, please.")) {
+        if (a.equals("open notepad please")) {
             appPage.setVisible(true);
         }
-        if (a.equals("Close notepad, please.")) {
+        if (a.equals("close notepad please")) {
             appPage.setVisible(false);
         }
     }

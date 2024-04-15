@@ -59,7 +59,7 @@ public class welcome extends javax.swing.JFrame {
         setVisible(true);
     
     //---timer-----//
-    int welcomeDuration = 12000;
+    int welcomeDuration = 14000;
     welcomeTimer  = new Timer(welcomeDuration, new ActionListener() {
         @Override
         public void actionPerformed(ActionEvent e) {
